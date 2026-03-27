@@ -600,7 +600,7 @@ function ge(id){return document.getElementById(id);}
 // Pega la URL de tu Google Apps Script Web App aquí abajo.
 // Esta información NO es visible para los usuarios.
 // ═══════════════════════════════════════════════════════
-const SHEETS_WEBHOOK = ''; // <- PEGA TU URL AQUÍ
+const SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyDFuZFIbIG3-RXFKtga7_1qinvGgviwlFn37UD_6c17KIuMGAvBLUhWSUjrT2_RDmu/exec';
 
 let db = {empresas:[], evaluaciones:[], riesgos:[], recorridos:[], pausas:[], tipoPerson:'moral'};
 try{const s=localStorage.getItem('leysilla_mx_v1');if(s)db=JSON.parse(s);}catch(e){}
