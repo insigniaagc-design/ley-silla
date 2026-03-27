@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico Ley Silla — Insignia AGC</title>
+<meta name="description" content="Plataforma digital para el análisis, evaluación y cumplimiento de la Ley Silla (Reforma LFT, DOF 19-dic-2024). Bipedestación y riesgos ergonómicos en México.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D2545;--navy2:#163460;--blue:#1A56A0;--blue2:#2271C3;
+  --sky:#4FA8E8;--sky2:#E8F4FD;--teal:#0E7C7B;--teal2:#D0EEEC;
+  --gold:#C9882A;--gold2:#FEF3DC;--red:#C0392B;--red2:#FDECEB;
+  --green:#1A7A4A;--green2:#E4F5EC;
+  --gray1:#F7F8FA;--gray2:#EEF0F4;--gray3:#D5D9E2;--gray4:#9BA4B5;--gray5:#5A6478;
+  --dark:#1A1F2E;--white:#FFFFFF;
+  --font-head:'DM Serif Display',serif;--font-body:'DM Sans',sans-serif;
+  --radius:10px;--radius-lg:16px;
+  --shadow:0 2px 12px rgba(13,37,69,.10);--shadow-lg:0 8px 32px rgba(13,37,69,.15);
+  --transition:.2s ease;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:var(--gray1);min-height:100vh;line-height:1.6}
+.app-shell{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:260px;background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;transition:transform var(--transition)}
+.sidebar-logo{padding:24px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--sky),var(--blue2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.logo-text{display:flex;flex-direction:column}
+.logo-title{font-family:var(--font-head);font-size:17px;color:var(--white);line-height:1.1}
+.logo-sub{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.4px;margin-top:2px}
+.sidebar-nav{flex:1;padding:14px 0;overflow-y:auto}
+.nav-section{padding:6px 16px 4px;font-size:10px;letter-spacing:1.2px;color:rgba(255,255,255,.3);text-transform:uppercase;font-weight:600;margin-top:8px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 20px;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--transition);border-left:3px solid transparent;font-size:13.5px}
+.nav-item:hover{background:rgba(255,255,255,.06);color:var(--white)}
+.nav-item.active{background:rgba(74,168,232,.12);color:var(--sky);border-left-color:var(--sky);font-weight:500}
+.nav-item .ni{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--sky);color:var(--navy);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center}
+.sidebar-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.3)}
+.sidebar-footer strong{display:block;color:rgba(255,255,255,.5);margin-bottom:2px}
+
+/* MAIN */
+.main{margin-left:260px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--white);border-bottom:1px solid var(--gray3);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(13,37,69,.06)}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.menu-toggle{display:none;background:none;border:none;cursor:pointer;width:34px;height:34px;border-radius:8px;color:var(--gray5);font-size:20px;align-items:center;justify-content:center;transition:var(--transition)}
+.menu-toggle:hover{background:var(--gray2)}
+.page-title{font-size:15px;font-weight:500;color:var(--dark)}
+.page-subtitle{font-size:12px;color:var(--gray4);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-date{font-size:12px;color:var(--gray4)}
+.btn-print{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--navy);color:var(--white);border:none;border-radius:8px;font-size:13px;font-family:var(--font-body);cursor:pointer;transition:var(--transition)}
+.btn-print:hover{background:var(--navy2)}
+
+/* CONTENT */
+.content{padding:24px 28px;flex:1}
+.panel{display:none}.panel.active{display:block}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--gray3);border-radius:var(--radius-lg);padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--gray2)}
+.card-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ci-blue{background:var(--sky2);color:var(--blue2)}.ci-teal{background:var(--teal2);color:var(--teal)}
+.ci-gold{background:var(--gold2);color:var(--gold)}.ci-green{background:var(--green2);color:var(--green)}
+.ci-red{background:var(--red2);color:var(--red)}
+.card-title{font-size:15px;font-weight:600;color:var(--navy)}
+.card-desc{font-size:12px;color:var(--gray4);margin-top:2px}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px}
+.kpi-card{background:var(--white);border:1px solid var(--gray3);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--sky))}
+.kpi-label{font-size:11px;color:var(--gray4);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+.kpi-val{font-size:30px;font-weight:600;color:var(--navy);line-height:1.1;margin:5px 0 2px}
+.kpi-sub{font-size:11px;color:var(--gray4)}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-3{grid-template-columns:1fr 1fr 1fr}
+.form-full{grid-column:1/-1}
+@media(max-width:640px){.form-grid,.form-3{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11.5px;font-weight:600;color:var(--gray5);letter-spacing:.2px;text-transform:uppercase}
+.field input,.field select,.field textarea{padding:9px 13px;border:1.5px solid var(--gray3);border-radius:var(--radius);font-size:13.5px;font-family:var(--font-body);color:var(--dark);background:var(--white);transition:var(--transition);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(34,113,195,.1)}
+.field input::placeholder,.field textarea::placeholder{color:var(--gray4)}
+.field textarea{resize:vertical;min-height:76px}
+.field select{cursor:pointer}
+
+/* TIPO PERSONA */
+.tipo-persona{display:flex;gap:8px;margin-bottom:14px}
+.tp-btn{flex:1;padding:10px 14px;border:1.5px solid var(--gray3);border-radius:var(--radius);background:var(--white);color:var(--gray5);font-size:13px;font-family:var(--font-body);cursor:pointer;transition:var(--transition);text-align:center;font-weight:500}
+.tp-btn:hover{border-color:var(--blue2);color:var(--blue2)}
+.tp-btn.active{background:var(--sky2);border-color:var(--blue2);color:var(--navy);font-weight:600}
+
+/* RADIO PILLS */
+.radio-pills{display:flex;gap:8px;flex-wrap:wrap}
+.radio-pills label{display:flex;align-items:center;gap:7px;padding:7px 13px;border:1.5px solid var(--gray3);border-radius:30px;font-size:13px;cursor:pointer;transition:var(--transition);color:var(--gray5)}
+.radio-pills label:hover{border-color:var(--blue2);color:var(--blue2)}
+.radio-pills input[type=radio]{accent-color:var(--blue2)}
+.radio-pills label:has(input:checked){border-color:var(--blue2);background:var(--sky2);color:var(--blue2);font-weight:500}
+
+/* CHECKLIST */
+.check-wrap{border:1px solid var(--gray3);border-radius:var(--radius-lg);overflow:hidden}
+.check-head{display:grid;grid-template-columns:36px 1fr 80px 80px;background:var(--navy);padding:9px 14px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.3px;text-transform:uppercase}
+.check-row{display:grid;grid-template-columns:36px 1fr 80px 80px;padding:10px 14px;align-items:center;border-bottom:1px solid var(--gray2);transition:var(--transition)}
+.check-row:last-child{border-bottom:none}
+.check-row:hover{background:var(--gray1)}
+.check-num{font-size:11px;color:var(--gray4);font-weight:600}
+.check-text{font-size:13px;color:var(--dark);line-height:1.4;padding-right:8px}
+.check-center{display:flex;justify-content:center}
+.check-row input[type=radio]{width:17px;height:17px;cursor:pointer}
+.r-si input[type=radio]{accent-color:var(--teal)}
+.r-no input[type=radio]{accent-color:var(--red)}
+
+/* PUNTAJE RIESGO */
+.riesgo-wrap{display:none;border:1px solid var(--gray3);border-radius:var(--radius-lg);overflow:hidden;margin-top:16px}
+.riesgo-wrap.visible{display:block}
+.riesgo-head{background:var(--navy);padding:12px 16px;color:rgba(255,255,255,.9);font-size:13px;font-weight:600}
+.riesgo-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.riesgo-item{padding:10px 16px;border-bottom:1px solid var(--gray2);border-right:1px solid var(--gray2)}
+.riesgo-item:nth-child(even){border-right:none}
+.riesgo-label{font-size:11px;color:var(--gray4);font-weight:600;text-transform:uppercase;letter-spacing:.2px;margin-bottom:2px}
+.riesgo-val{font-size:13px;color:var(--dark)}
+.riesgo-total{padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.riesgo-score{font-size:28px;font-weight:700;color:var(--navy)}
+.riesgo-status{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+.rs-bajo{background:var(--green2);color:var(--green)}
+.rs-medio{background:var(--gold2);color:var(--gold)}
+.rs-alto{background:var(--red2);color:var(--red)}
+
+/* SCORE BAR */
+.score-wrap{display:none;padding:16px;border-radius:var(--radius);margin-top:14px;border:1px solid var(--gray3)}
+.score-wrap.visible{display:block}
+.score-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.score-label{font-size:13px;font-weight:600;color:var(--gray5)}
+.score-pct{font-size:26px;font-weight:700;color:var(--navy)}
+.score-track{height:9px;background:var(--gray2);border-radius:8px;overflow:hidden}
+.score-fill{height:100%;border-radius:8px;transition:.6s ease}
+.score-fill.high{background:linear-gradient(90deg,var(--teal),#27ae60)}
+.score-fill.mid{background:linear-gradient(90deg,var(--gold),#f39c12)}
+.score-fill.low{background:linear-gradient(90deg,var(--red),#e74c3c)}
+.score-status{margin-top:10px;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:500}
+.status-high{background:var(--green2);color:var(--green)}
+.status-mid{background:var(--gold2);color:var(--gold)}
+.status-low{background:var(--red2);color:var(--red)}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--gray2)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius);font-size:13.5px;font-family:var(--font-body);font-weight:500;cursor:pointer;transition:var(--transition);border:none}
+.btn-primary{background:var(--navy);color:var(--white)}.btn-primary:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn-secondary{background:var(--gray2);color:var(--gray5);border:1.5px solid var(--gray3)}.btn-secondary:hover{background:var(--gray3);color:var(--dark)}
+.btn-accent{background:linear-gradient(135deg,var(--blue),var(--sky));color:var(--white)}.btn-accent:hover{box-shadow:0 4px 14px rgba(26,86,160,.3);transform:translateY(-1px)}
+.btn-danger{background:var(--red2);color:var(--red);border:1.5px solid #f5c6c4}.btn-danger:hover{background:var(--red);color:var(--white)}
+.btn-sm{padding:5px 11px;font-size:12px}
+
+/* ALERT */
+.alert{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;border-radius:var(--radius);margin-bottom:14px;font-size:13px;line-height:1.5}
+.alert-info{background:var(--sky2);border:1px solid rgba(79,168,232,.3);color:var(--blue)}
+.alert-warn{background:var(--gold2);border:1px solid rgba(201,136,42,.3);color:var(--gold)}
+.alert-success{background:var(--green2);border:1px solid rgba(26,122,74,.2);color:var(--green)}
+.alert-icon{font-size:15px;margin-top:1px;flex-shrink:0}
+
+/* TABLES */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:var(--navy);color:rgba(255,255,255,.85);padding:9px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.3px;text-transform:uppercase}
+.data-table th:first-child{border-radius:10px 0 0 0}.data-table th:last-child{border-radius:0 10px 0 0}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle}
+.data-table tr:hover td{background:var(--gray1)}
+.data-table tr:last-child td{border-bottom:none}
+.table-wrap{border:1px solid var(--gray3);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
+.table-scroll{overflow-x:auto}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.badge-high{background:var(--green2);color:var(--green)}.badge-mid{background:var(--gold2);color:var(--gold)}.badge-low{background:var(--red2);color:var(--red)}
+
+/* PAUSA ITEMS */
+.pausa-list{display:flex;flex-direction:column;gap:8px}
+.pausa-item{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--gray1);border:1px solid var(--gray2);border-radius:var(--radius)}
+.pausa-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--sky));color:var(--white);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pausa-info{flex:1;min-width:0}
+.pausa-name{font-size:13px;font-weight:600;color:var(--dark)}
+.pausa-meta{font-size:12px;color:var(--gray4);margin-top:1px}
+.pausa-dur{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--blue2) 60%,var(--sky) 100%);border-radius:var(--radius-lg);padding:32px 36px;color:var(--white);margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hero::after{content:'';position:absolute;right:60px;bottom:-80px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-title{font-family:var(--font-head);font-size:26px;line-height:1.2;margin-bottom:6px}
+.hero-sub{font-size:13.5px;opacity:.75;max-width:480px;line-height:1.6}
+.hero-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px}
+.hero-step{background:rgba(255,255,255,.1);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:13px 15px}
+.hero-step-num{width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:7px}
+.hero-step-title{font-size:12.5px;font-weight:600;margin-bottom:2px}
+.hero-step-desc{font-size:11px;opacity:.65;line-height:1.4}
+
+/* NORMATIVA BANNER */
+.norm-banner{background:var(--navy);color:rgba(255,255,255,.85);border-radius:var(--radius);padding:10px 16px;font-size:12px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.norm-banner strong{color:var(--sky)}
+
+/* REPORT */
+.report-box{background:var(--gray1);border:1px solid var(--gray3);border-radius:var(--radius);padding:18px;font-family:'Courier New',monospace;font-size:12px;line-height:1.75;white-space:pre-wrap;max-height:440px;overflow-y:auto;color:var(--dark)}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:44px 24px;color:var(--gray4)}
+.empty-icon{font-size:38px;margin-bottom:10px;opacity:.5}
+.empty-title{font-size:14px;font-weight:600;color:var(--gray5);margin-bottom:4px}
+.empty-desc{font-size:13px}
+
+.divider{border:none;border-top:1px solid var(--gray2);margin:18px 0}
+.section-label{font-size:11px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:18px;padding-bottom:6px;border-bottom:1px solid var(--gray2)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--navy);color:var(--white);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:.35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-left:4px solid var(--teal)}
+.toast.error{border-left:4px solid var(--red)}
+
+/* OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190}
+.overlay.active{display:block}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}.menu-toggle{display:flex}
+  .content{padding:16px 14px}.topbar{padding:0 14px}
+  .hero{padding:22px 18px}.hero-title{font-size:20px}
+  .check-head,.check-row{grid-template-columns:28px 1fr 64px 64px}
+}
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .hero-steps{grid-template-columns:1fr 1fr}
+  .check-text{font-size:12px}.check-head,.check-row{padding:8px 10px}
+}
+@media print{
+  .sidebar,.topbar,.btn-row,.btn-print,.menu-toggle,.overlay{display:none!important}
+  .main{margin-left:0}.card{box-shadow:none;border:1px solid #ccc}.content{padding:0}
+}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo" style="padding:16px 18px 14px">
+    <a class="logo-mark" href="https://www.insigniaagc.com" target="_blank" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <img src="https://www.insigniaagc.com/wp-content/uploads/2024/01/insignia-logo.png"
+           alt="Insignia AGC"
+           style="height:36px;object-fit:contain;filter:brightness(0) invert(1);opacity:.9"
+           onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'">
+      <div id="logo-fallback" style="display:none;width:36px;height:36px;background:linear-gradient(135deg,var(--sky),var(--blue2));border-radius:9px;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚖️</div>
+      <div class="logo-text">
+        <span class="logo-title" style="font-size:15px">Insignia AGC</span>
+        <span class="logo-sub">DIAGNÓSTICO · LFT 2025</span>
+      </div>
+    </a>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Principal</div>
+    <div class="nav-item active" onclick="showPanel('inicio',this)"><span class="ni">🏠</span> Panel de control</div>
+    <div class="nav-section">Registro</div>
+    <div class="nav-item" onclick="showPanel('empresa',this)"><span class="ni">🏢</span> Datos del patrón</div>
+    <div class="nav-section">Diagnóstico</div>
+    <div class="nav-item" onclick="showPanel('evaluacion',this)"><span class="ni">📋</span> Evaluar puestos</div>
+    <div class="nav-item" onclick="showPanel('riesgo',this)"><span class="ni">📊</span> Nivel de riesgo</div>
+    <div class="nav-section">Resultados</div>
+    <div class="nav-item" onclick="showPanel('reporte',this)"><span class="ni">📄</span> Imprimir reporte</div>
+  </nav>
+  <div class="sidebar-footer">
+    <strong>Insignia AGC · Ley Silla v2.1</strong>
+    <a href="https://www.insigniaagc.com" target="_blank" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:10px">www.insigniaagc.com</a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <div>
+        <div class="page-title" id="page-title">Panel de control</div>
+        <div class="page-subtitle" id="page-subtitle">Resumen general del sistema</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-date" id="topbar-date"></span>
+      <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- ══ INICIO ══ -->
+    <div id="panel-inicio" class="panel active">
+      <div class="hero">
+        <div class="hero-title">Sistema Ley Silla — México</div>
+        <div class="hero-sub">Gestión integral de riesgos ergonómicos por bipedestación. Conforme a la Reforma LFT (DOF 19-dic-2024) y Disposiciones STPS del 17-jul-2025. Inspecciones STPS activas desde 2026.</div>
+        <div class="hero-steps">
+          <div class="hero-step"><div class="hero-step-num">1</div><div class="hero-step-title">Datos del patrón</div><div class="hero-step-desc">RFC, Registro Patronal, domicilio del centro de trabajo</div></div>
+          <div class="hero-step"><div class="hero-step-num">2</div><div class="hero-step-title">Evaluar puestos</div><div class="hero-step-desc">Un registro por cada colaborador en bipedestación</div></div>
+          <div class="hero-step"><div class="hero-step-num">3</div><div class="hero-step-title">Nivel de riesgo</div><div class="hero-step-desc">7 condicionantes STPS por colaborador</div></div>
+          <div class="hero-step"><div class="hero-step-num">4</div><div class="hero-step-title">Tu reporte</div><div class="hero-step-desc">Imprime o descarga tu informe de cumplimiento</div></div>
+        </div>
+      </div>
+      <div class="norm-banner">⚖️ <span>Este diagnóstico es <strong>confidencial</strong>. La información que proporcionas ayuda a Insignia AGC a identificar las condiciones ergonómicas de tu centro de trabajo y generar recomendaciones de cumplimiento de la Ley Silla (Reforma LFT, DOF 19-dic-2024).</span></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">Patrones</div><div class="kpi-val" id="k-emp">0</div><div class="kpi-sub">registrados</div></div>
+        <div class="kpi-card"><div class="kpi-label">Evaluaciones</div><div class="kpi-val" id="k-eva">0</div><div class="kpi-sub">de puesto</div></div>
+        
+        
+        <div class="kpi-card"><div class="kpi-label">Cumplimiento</div><div class="kpi-val" id="k-cum">—</div><div class="kpi-sub">promedio general</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-blue">📊</div><div><div class="card-title">Últimas evaluaciones</div><div class="card-desc">Puestos evaluados recientemente</div></div></div>
+        <div id="recent-evals"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin evaluaciones aún</div><div class="empty-desc">Ve a "Evaluar puesto" para comenzar</div></div></div>
+      </div>
+    </div>
+
+    <!-- ══ EMPRESA ══ -->
+    <div id="panel-empresa" class="panel">
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-blue">🏢</div><div><div class="card-title">Registro del patrón / Centro de trabajo</div><div class="card-desc">Datos del empleador conforme al Art. 132 LFT reformado</div></div></div>
+        <div class="alert alert-info"><span class="alert-icon">💡</span> Campos con <strong>*</strong> son obligatorios. Esta información formará parte del acta de recorrido y del reporte para la STPS.</div>
+
+        <div class="section-label">Tipo de persona y datos fiscales</div>
+        <div class="tipo-persona">
+          <button class="tp-btn active" id="tp-moral" onclick="setTipo('moral')">🏢 Persona Moral</button>
+          <button class="tp-btn" id="tp-fisica" onclick="setTipo('fisica')">👤 Persona Física</button>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label id="lbl-razon">Razón social *</label><input id="e-razon" placeholder="Denominación o razón social"></div>
+          <div class="field"><label>RFC *</label><input id="e-rfc" placeholder="Ej. ABC123456XYZ" maxlength="13" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
+          <div class="field"><label>Registro Patronal IMSS *</label><input id="e-regpat" placeholder="Ej. A1234567890" maxlength="11" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
+          <div class="field"><label>Actividad económica</label><input id="e-actividad" placeholder="Describe la actividad principal del negocio"></div>
+          <div class="field"><label>Número total de personas trabajadoras</label><input id="e-emp" type="number" min="0" placeholder="0"></div>
+          <div class="field"><label>Clase de riesgo IMSS</label>
+            <select id="e-riesgo">
+              <option value="">Seleccionar...</option>
+              <option value="I">Clase I — Riesgo mínimo</option>
+              <option value="II">Clase II — Riesgo bajo</option>
+              <option value="III">Clase III — Riesgo medio</option>
+              <option value="IV">Clase IV — Riesgo alto</option>
+              <option value="V">Clase V — Riesgo máximo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-label">Domicilio del centro de trabajo</div>
+        <div class="form-grid">
+          <div class="field form-full"><label>Calle, número exterior e interior</label><input id="e-calle" placeholder="Ej. Av. Insurgentes Sur 123, Int. 4B"></div>
+          <div class="field"><label>Colonia</label><input id="e-colonia" placeholder="Nombre de la colonia o fraccionamiento"></div>
+          <div class="field"><label>C.P.</label><input id="e-cp" placeholder="00000" maxlength="5" type="text" inputmode="numeric"></div>
+          <div class="field"><label>Municipio / Alcaldía / Ciudad *</label><input id="e-municipio" placeholder="Escribe el municipio o alcaldía"></div>
+          <div class="field"><label>Estado *</label>
+            <select id="e-estado">
+              <option value="">Seleccionar estado...</option>
+              <option>Aguascalientes</option><option>Baja California</option><option>Baja California Sur</option>
+              <option>Campeche</option><option>Chiapas</option><option>Chihuahua</option>
+              <option>Ciudad de México</option><option>Coahuila de Zaragoza</option><option>Colima</option>
+              <option>Durango</option><option>Estado de México</option><option>Guanajuato</option>
+              <option>Guerrero</option><option>Hidalgo</option><option>Jalisco</option>
+              <option>Michoacán de Ocampo</option><option>Morelos</option><option>Nayarit</option>
+              <option>Nuevo León</option><option>Oaxaca</option><option>Puebla</option>
+              <option>Querétaro</option><option>Quintana Roo</option><option>San Luis Potosí</option>
+              <option>Sinaloa</option><option>Sonora</option><option>Tabasco</option>
+              <option>Tamaulipas</option><option>Tlaxcala</option><option>Veracruz de Ignacio de la Llave</option>
+              <option>Yucatán</option><option>Zacatecas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-label">Contacto del centro de trabajo</div>
+        <div class="form-grid">
+          <div class="field"><label>Teléfono</label><input id="e-tel" placeholder="Ej. (55) 1234-5678" type="tel"></div>
+          <div class="field"><label>Correo electrónico</label><input id="e-email" type="email" placeholder="contacto@empresa.com.mx"></div>
+          <div class="field"><label>Fecha de evaluación</label><input id="e-fecha" type="date"></div>
+          <div class="field"><label>Sector de actividad</label>
+            <select id="e-sector">
+              <option value="">Seleccionar...</option>
+              <option>Servicios</option><option>Comercio</option><option>Industrial / Manufactura</option>
+              <option>Restaurantes y alimentos</option><option>Salud</option><option>Educación</option>
+              <option>Logística y distribución</option><option>Vigilancia privada</option><option>Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-label">Condiciones del centro de trabajo</div>
+        <div class="form-grid">
+          <div class="field form-full"><label>Descripción de actividades con bipedestación (postura de pie)</label><textarea id="e-actividades" placeholder="Describe las áreas, puestos o actividades donde las personas trabajadoras permanecen de pie durante la jornada laboral..."></textarea></div>
+          <div class="field form-full"><label>Observaciones generales del centro de trabajo</label><textarea id="e-obs" placeholder="Condiciones especiales, turnos, número de áreas, distribución del personal, instalaciones, comisión de seguridad e higiene..."></textarea></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="saveEmpresa()">💾 Guardar patrón</button>
+          <button class="btn btn-secondary" onclick="clearEmpresa()">🗑 Limpiar formulario</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ EVALUACIÓN PUESTO ══ -->
+    <div id="panel-evaluacion" class="panel">
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-teal">📋</div><div><div class="card-title">Datos del puesto de trabajo</div><div class="card-desc">Completa un formulario por cada persona trabajadora</div></div></div>
+        <div id="eval-patron-banner" style="margin-bottom:14px"></div>
+        <div class="alert alert-info"><span class="alert-icon">💡</span> Responde según lo que <strong>tú vives en tu puesto de trabajo</strong>. Cuando termines puedes guardar y agregar a otro colaborador.</div>
+        <div class="form-grid">
+          <div class="field"><label>Nombre del puesto *</label><input id="ev-puesto" placeholder="Cajero/a, Vendedor/a, Vigilante..."></div>
+          <div class="field"><label>Nombre de la persona trabajadora</label><input id="ev-trabajador" placeholder="Nombre completo"></div>
+          <div class="field"><label>Área o departamento</label><input id="ev-area" placeholder="Caja, Mostrador, Producción..."></div>
+          <div class="field"><label>Tipo de jornada</label>
+            <select id="ev-jornada">
+              <option value="">Seleccionar...</option>
+              <option>Diurna (hasta 8h)</option><option>Nocturna (hasta 7h)</option>
+              <option>Mixta (hasta 7.5h)</option><option>Turnos rotativos</option>
+              <option>Reducida / Medio tiempo</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="field"><label>Tipo de bipedestación</label>
+            <div class="radio-pills" style="margin-top:4px">
+              <label><input type="radio" name="bipe" value="Estática"> 🔒 Estática</label>
+              <label><input type="radio" name="bipe" value="Dinámica"> 🚶 Dinámica</label>
+              <label><input type="radio" name="bipe" value="Prolongada (+3h)"> ⏳ Prolongada (+3h)</label>
+              <label><input type="radio" name="bipe" value="Combinada"> 🔄 Combinada</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-teal">✅</div><div><div class="card-title">Lista de verificación de cumplimiento</div><div class="card-desc">Marca según lo observado en campo durante el recorrido</div></div></div>
+        <div class="check-wrap">
+          <div class="check-head"><div>N°</div><div>Ítem de verificación (Art. 132 y 133 LFT)</div><div style="text-align:center">Sí ✅</div><div style="text-align:center">No ❌</div></div>
+          <div id="checklist-body"></div>
+        </div>
+        <div class="score-wrap" id="score-wrap">
+          <div class="score-top"><span class="score-label">Cumplimiento normativo</span><span class="score-pct" id="score-pct">0%</span></div>
+          <div class="score-track"><div class="score-fill" id="score-fill"></div></div>
+          <div class="score-status" id="score-status"></div>
+        </div>
+        <hr class="divider">
+        <div class="form-grid">
+          <div class="field form-full"><label>Observaciones del colaborador</label><textarea id="ev-hallazgos" placeholder="¿Cómo describes las condiciones de tu puesto? Puedes mencionar: tipo de piso, estado del mobiliario, si tienes acceso a silla, malestares frecuentes, condiciones del área..."></textarea></div>
+          <!-- ev-correctivas: solo para Insignia AGC — no visible para el usuario --><textarea id="ev-correctivas" style="display:none"></textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="saveEval()">💾 Guardar evaluación</button>
+          <button class="btn btn-accent" onclick="calcScore()">📊 Calcular cumplimiento</button>
+          <button class="btn btn-secondary" onclick="saveAndNewEval()" style="background:var(--green2);color:var(--green);border-color:rgba(26,122,74,.3)">➕ Guardar y evaluar otro colaborador</button>
+          <button class="btn btn-secondary" onclick="clearEval()">🗑 Limpiar</button>
+        </div>
+        <!-- Historial evaluaciones -->
+        <div id="eval-history-section" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--gray2)">
+          <div style="font-size:11px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Evaluaciones guardadas en esta sesión</div>
+          <div id="eval-history-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NIVEL DE RIESGO ══ -->
+    <div id="panel-riesgo" class="panel">
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-red">📊</div><div><div class="card-title">Determinación del nivel de riesgo por bipedestación</div><div class="card-desc">Disposición Quinta · 7 condicionantes STPS · DOF 17-jul-2025</div></div></div>
+        <div class="alert alert-info"><span class="alert-icon">📋</span> Responde cada pregunta según <strong>tu situación real y actual</strong> en tu puesto de trabajo. No hay respuestas correctas o incorrectas.</div>
+        <div id="riesgo-patron-banner" style="margin-bottom:14px"></div>
+        <div class="form-grid">
+          <div class="field"><label>Persona trabajadora *</label><input id="r-trabajador" placeholder="Nombre completo"></div>
+          <div class="field"><label>Puesto de trabajo</label><input id="r-puesto" placeholder="Cajero/a, Vigilante..."></div>
+          <div class="field"><label>Área</label><input id="r-area" placeholder="Caja, Mostrador..."></div>
+        </div>
+        <div class="section-label" style="margin-top:16px">Condicionantes de evaluación (1 = mejor condición · 3 = peor condición)</div>
+
+        <div id="condicionantes-wrap"></div>
+
+        <div class="riesgo-wrap" id="riesgo-result">
+          <div class="riesgo-head">Resultado de la evaluación de riesgo</div>
+          <div class="riesgo-grid" id="riesgo-detalle"></div>
+          <div class="riesgo-total">
+            <div><div style="font-size:12px;color:var(--gray4);margin-bottom:2px">PUNTAJE TOTAL</div><div class="riesgo-score" id="r-total">0</div><div style="font-size:11px;color:var(--gray4)">de 21 puntos posibles</div></div>
+            <div class="riesgo-status" id="r-nivel"></div>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-top:14px">
+          <div class="field form-full"><label>Observaciones del colaborador (opcional)</label><textarea id="r-obs" placeholder="¿Tienes alguna condición especial que quieras mencionar? Por ejemplo: tipo de calzado que usas, estado del piso en tu área, condición de salud, embarazo, lesión previa..."></textarea></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="saveRiesgo()">💾 Guardar evaluación de riesgo</button>
+          <button class="btn btn-accent" onclick="calcRiesgo()">📊 Calcular nivel de riesgo</button>
+          <button class="btn btn-secondary" onclick="clearRiesgo()">🗑 Limpiar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAUSAS ══ -->
+    <div id="panel-reporte" class="panel">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon ci-green">📄</div>
+          <div>
+            <div class="card-title">Generar e imprimir reporte</div>
+            <div class="card-desc">Informe de cumplimiento Ley Silla · Disposiciones STPS 17-jul-2025</div>
+          </div>
+        </div>
+        <div class="alert alert-info">
+          <span class="alert-icon">📄</span>
+          <span>El reporte incluye todos los datos del patrón, evaluaciones de puesto, nivel de riesgo, actas de recorrido y bitácora de pausas. Puedes imprimirlo o guardarlo como PDF.</span>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Nombre del evaluador / responsable</label>
+            <input id="rev" placeholder="Nombre completo del responsable SST">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-accent" onclick="generarYImprimir()">🖨 Generar e imprimir reporte</button>
+          <button class="btn btn-primary" onclick="generarYCopiar()">📋 Copiar reporte</button>
+        </div>
+      </div>
+      <!-- Vista previa oculta — solo para generación, el usuario ve la ventana de impresión -->
+      <div id="rep-out" style="display:none"></div>
+    </div>
+
+
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CHECKLIST ITEMS ──
+const ITEMS = [
+  "El patrón proporciona sillas con respaldo suficientes para las personas trabajadoras (Art. 132 LFT)",
+  "Los asientos son adecuados al puesto y permiten que los pies toquen el suelo (90° en rodillas)",
+  "Los respaldos cuentan con soporte lumbar flexible adaptado a la columna vertebral",
+  "Se han designado áreas específicas para el descanso sentado durante la jornada",
+  "El patrón NO obliga a permanecer de pie durante TODA la jornada laboral (Art. 133 LFT)",
+  "El patrón NO prohíbe tomar asiento periódicamente durante el desarrollo de funciones",
+  "Se cuenta con programa de pausas activas conforme al análisis de riesgo por bipedestación",
+  "Las pausas son periódicas y efectivas (no sólo de segundos)",
+  "Se permite la alternancia entre postura de pie y postura sentada",
+  "El mobiliario (sillas, bancos, reposapiés) está en buen estado y condiciones higiénicas",
+  "El reglamento interior de trabajo incluye normas sobre el uso de sillas (Art. 423 LFT)",
+  "La Comisión de Seguridad e Higiene ha realizado recorridos y levantado actas de verificación",
+  "Se han registrado los once elementos exigidos por la Disposición Quinta (Apdo. C) STPS",
+  "Se ha evaluado el nivel de riesgo por bipedestación con las 7 condicionantes STPS",
+  "Las personas trabajadoras han sido informadas sobre los riesgos de la bipedestación",
+  "Las áreas de descanso con asientos están debidamente señalizadas",
+  "Se ha canalizado a atención médica a quienes presentan síntomas por bipedestación prolongada"
+];
+
+// ── CONDICIONANTES STPS (7) ──
+const CONDICIONANTES = [
+  {id:'c1', label:'a) Tiempo de permanencia de pie', opts:[
+    {val:1,txt:'≤ 30 minutos sin descanso sentado'},
+    {val:2,txt:'Entre 30 min y 1 hora sin descanso'},
+    {val:3,txt:'Más de 1 hora continua de pie sin descanso'}
+  ]},
+  {id:'c2', label:'b) Posibilidad de cambiar de postura', opts:[
+    {val:1,txt:'Permite cambiar de postura con frecuencia'},
+    {val:2,txt:'Ocurre solo algunas veces'},
+    {val:3,txt:'No hay posibilidad de cambiar de postura'}
+  ]},
+  {id:'c3', label:'c) Tipo de superficie del piso', opts:[
+    {val:1,txt:'Piso con recubrimiento blando o antifatiga'},
+    {val:2,txt:'Piso firme pero no duro (madera o hule)'},
+    {val:3,txt:'Piso duro (concreto, cerámica, mármol)'}
+  ]},
+  {id:'c4', label:'d) Características del calzado', opts:[
+    {val:1,txt:'Calzado ergonómico con soporte y amortiguación'},
+    {val:2,txt:'Calzado aceptable, aunque no específico'},
+    {val:3,txt:'Calzado inadecuado, duro, de tacón o inseguro'}
+  ]},
+  {id:'c5', label:'e) Espacio disponible para moverse', opts:[
+    {val:1,txt:'Espacio amplio con libertad de movimiento'},
+    {val:2,txt:'Espacio limitado con obstáculos'},
+    {val:3,txt:'Espacio muy reducido, sin posibilidad de desplazarse'}
+  ]},
+  {id:'c6', label:'f) Malestares reportados por la persona trabajadora', opts:[
+    {val:1,txt:'Ningún malestar'},
+    {val:2,txt:'Fatiga ocasional, dolor leve en extremidades'},
+    {val:3,txt:'Dolor lumbar frecuente, hinchazón o calambres'}
+  ]},
+  {id:'c7', label:'g) Pausas, tareas alternas o complementarias', opts:[
+    {val:1,txt:'Pausas programadas a tiempos regulares'},
+    {val:2,txt:'Algunas pausas informales no programadas'},
+    {val:3,txt:'Ausencia total de pausas o posibilidad de sentarse'}
+  ]}
+];
+
+// ── DB ──
+// ═══════════════════════════════════════════════════════
+// INSIGNIA AGC — CONFIGURACIÓN PRIVADA
+// ─── Helper seguro para getElementById ───
+function gv(id){const el=document.getElementById(id);return el?el.value:'';}
+function sv2(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+function sv3(id,val){const el=document.getElementById(id);if(el)el.value=val;}
+function ge(id){return document.getElementById(id);}
+// Pega la URL de tu Google Apps Script Web App aquí abajo.
+// Esta información NO es visible para los usuarios.
+// ═══════════════════════════════════════════════════════
+const SHEETS_WEBHOOK = ''; // <- PEGA TU URL AQUÍ
+
+let db = {empresas:[], evaluaciones:[], riesgos:[], recorridos:[], pausas:[], tipoPerson:'moral'};
+try{const s=localStorage.getItem('leysilla_mx_v1');if(s)db=JSON.parse(s);}catch(e){}
+
+function persist(){
+  try{localStorage.setItem('leysilla_mx_v1',JSON.stringify(db));}catch(e){}
+  updateKPIs();
+  const t=db.evaluaciones.length+db.riesgos.length;
+  sv2('nb-total',t>0?t:'0');
+}
+
+// ── TOAST ──
+function toast(msg,type='success'){
+  const el=document.getElementById('toast');el.textContent=msg;
+  el.className='toast '+(type==='error'?'error':'success');el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+// ── NAV ──
+const TITLES={inicio:['Panel de control','Resumen general'],empresa:['Registro del patrón','Datos del centro de trabajo'],evaluacion:['Evaluar puesto de trabajo','Lista de verificación Art. 132-133 LFT'],riesgo:['Nivel de riesgo por bipedestación','7 condicionantes STPS · Disposición Quinta'],recorrido:['Acta de recorrido de verificación','Comisión de Seguridad e Higiene · Apdo. B y C STPS'],pausas:['Pausas activas','Bitácora de descansos'],base:['Base de datos','Registros almacenados'],reporte:['Generar reporte','Informe para STPS / cliente']};
+function showPanel(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  const t=TITLES[id]||['',''];
+  document.getElementById('page-title').textContent=t[0];
+  document.getElementById('page-subtitle').textContent=t[1];
+  if(id==='base')renderDB();
+  if(id==='reporte')populateSelect();
+  if(id==='pausas')renderPausas();
+  if(id==='inicio')renderRecent();
+  if(id==='recorrido')renderRecorridos();
+  closeSidebar();
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('active')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('active')}
+
+// ── DATE ──
+function setDate(){sv2('topbar-date',new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short',year:'numeric'}));}
+setDate();
+const today=new Date().toISOString().split('T')[0];
+sv3('e-fecha',today);
+sv3('p-fecha',today);
+sv3('ac-fecha',today);
+
+// ── TIPO PERSONA ──
+function setTipo(tipo){
+  db.tipoPerson=tipo;
+  document.getElementById('tp-moral').classList.toggle('active',tipo==='moral');
+  document.getElementById('tp-fisica').classList.toggle('active',tipo==='fisica');
+  document.getElementById('lbl-razon').textContent=tipo==='moral'?'Razón social *':'Nombre completo *';
+  document.getElementById('e-razon').placeholder=tipo==='moral'?'Denominación o razón social':'Nombre(s) y apellidos completos';
+}
+
+// ── CHECKLIST BUILD ──
+function buildChecklist(){
+  const body=document.getElementById('checklist-body');body.innerHTML='';
+  ITEMS.forEach((item,i)=>{
+    const row=document.createElement('div');row.className='check-row';
+    row.innerHTML=`<div class="check-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="check-text">${item}</div>
+      <div class="check-center r-si"><input type="radio" name="item${i}" value="si" onchange="calcScore()"></div>
+      <div class="check-center r-no"><input type="radio" name="item${i}" value="no" onchange="calcScore()"></div>`;
+    body.appendChild(row);
+  });
+}
+buildChecklist();
+
+// ── BUILD CONDICIONANTES ──
+function buildCondicionantes(){
+  const wrap=document.getElementById('condicionantes-wrap');wrap.innerHTML='';
+  CONDICIONANTES.forEach(c=>{
+    const div=document.createElement('div');div.style.cssText='margin-bottom:14px;padding:12px 14px;border:1px solid var(--gray3);border-radius:var(--radius);background:var(--white)';
+    div.innerHTML=`<div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px">${c.label}</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${c.opts.map(o=>`<label style="display:flex;align-items:center;gap:9px;font-size:13px;cursor:pointer;padding:6px 8px;border-radius:6px;transition:.15s" onmouseover="this.style.background='var(--gray1)'" onmouseout="this.style.background='transparent'">
+          <input type="radio" name="${c.id}" value="${o.val}" onchange="calcRiesgo()" style="accent-color:var(--blue2);width:15px;height:15px;flex-shrink:0">
+          <span style="font-weight:600;color:var(--blue2);min-width:16px">${o.val}</span> — ${o.txt}
+        </label>`).join('')}
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+buildCondicionantes();
+
+// ── SCORE ──
+function calcScore(){
+  let si=0;ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="item${i}"]:checked`);if(v&&v.value==='si')si++;});
+  const pct=Math.round((si/ITEMS.length)*100);
+  const wrap=document.getElementById('score-wrap'),fill=document.getElementById('score-fill'),status=document.getElementById('score-status');
+  wrap.classList.add('visible');
+  document.getElementById('score-pct').textContent=pct+'%';
+  fill.style.width=pct+'%';fill.className='score-fill';status.className='score-status';
+  if(pct>=80){fill.classList.add('high');status.classList.add('status-high');status.textContent='✅ Cumplimiento ALTO — El centro de trabajo cumple con los requisitos de la Ley Silla.';}
+  else if(pct>=50){fill.classList.add('mid');status.classList.add('status-mid');status.textContent='⚠️ Cumplimiento MEDIO — Se requieren acciones correctivas antes de la inspección STPS.';}
+  else{fill.classList.add('low');status.classList.add('status-low');status.textContent='🔴 Cumplimiento BAJO — Riesgo de sanción STPS. Multas hasta 2,500 UMA. Intervención inmediata.';}
+}
+
+function getBipedestacion(){const r=document.querySelector('input[name="bipe"]:checked');return r?r.value:'';}
+
+// ── EMPRESA ──
+function saveEmpresa(){
+  const razon=document.getElementById('e-razon').value.trim();const rfc=document.getElementById('e-rfc').value.trim();const regpat=document.getElementById('e-regpat').value.trim();
+  if(!razon){toast('El nombre/razón social es obligatorio','error');return;}
+  if(!rfc){toast('El RFC es obligatorio','error');return;}
+  const r={tipoPerson:db.tipoPerson,razon,rfc,regpat,
+    actividad:document.getElementById('e-actividad').value,emp:document.getElementById('e-emp').value,
+    riesgoClase:document.getElementById('e-riesgo').value,
+    calle:document.getElementById('e-calle').value,colonia:document.getElementById('e-colonia').value,
+    cp:document.getElementById('e-cp').value,municipio:document.getElementById('e-municipio').value,
+    estado:document.getElementById('e-estado').value,
+    tel:document.getElementById('e-tel').value,email:document.getElementById('e-email').value,
+    fecha:document.getElementById('e-fecha').value,sector:document.getElementById('e-sector').value,
+    actividades:document.getElementById('e-actividades').value,obs:document.getElementById('e-obs').value,
+    id:Date.now()};
+  db.empresas.push(r);persist();toast('✅ Patrón guardado correctamente');
+}
+function clearEmpresa(){['e-razon','e-rfc','e-regpat','e-actividad','e-emp','e-calle','e-colonia','e-cp','e-municipio','e-tel','e-email','e-actividades','e-obs'].forEach(id=>sv3(id,''));document.getElementById('e-riesgo').value='';document.getElementById('e-estado').value='';document.getElementById('e-sector').value=''}
+
+// ── EVALUACIÓN ──
+function saveEval(){
+  const empresa=document.getElementById('ev-empresa').value.trim();const puesto=document.getElementById('ev-puesto').value.trim();
+  if(!empresa||!puesto){toast('Patrón y puesto son obligatorios','error');return;}
+  let cumple=[],noCumple=[];
+  ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="item${i}"]:checked`);if(v){if(v.value==='si')cumple.push(i+1);else noCumple.push(i+1);}});
+  const pct=Math.round((cumple.length/ITEMS.length)*100);
+  const r={empresa,puesto,trabajador:document.getElementById('ev-trabajador').value,area:document.getElementById('ev-area').value,
+    jornada:document.getElementById('ev-jornada').value,bipedestacion:getBipedestacion(),cumple,noCumple,pct,
+    hallazgos:document.getElementById('ev-hallazgos').value,correctivas:document.getElementById('ev-correctivas').value,
+    fecha:new Date().toLocaleDateString('es-MX'),id:Date.now()};
+  db.evaluaciones.push(r);persist();toast(`✅ Evaluación guardada — Cumplimiento: ${pct}%`);
+}
+function clearEval(){
+  ['ev-empresa','ev-puesto','ev-trabajador','ev-area','ev-hallazgos','ev-correctivas'].forEach(id=>document.getElementById(id).value='');
+  sv3('ev-jornada','');
+  document.querySelectorAll('input[name^="item"],input[name="bipe"]').forEach(r=>r.checked=false);
+  document.getElementById('score-wrap').classList.remove('visible');
+}
+
+// ── RIESGO ──
+function calcRiesgo(){
+  let total=0,detalle=[];
+  CONDICIONANTES.forEach(c=>{
+    const v=document.querySelector(`input[name="${c.id}"]:checked`);
+    const pts=v?parseInt(v.value):0;total+=pts;
+    detalle.push({label:c.label,pts,txt:v?c.opts.find(o=>o.val===pts)?.txt||'—':'No evaluado'});
+  });
+  const res=document.getElementById('riesgo-result');res.classList.add('visible');
+  document.getElementById('r-total').textContent=total;
+  const det=document.getElementById('riesgo-detalle');
+  det.innerHTML=detalle.map(d=>`<div class="riesgo-item"><div class="riesgo-label">${d.label}</div><div class="riesgo-val">${d.pts}pt — ${d.txt}</div></div>`).join('');
+  const nivel=document.getElementById('r-nivel');nivel.className='riesgo-status';
+  if(total<=7){nivel.classList.add('rs-bajo');nivel.textContent='✅ Riesgo BAJO (7pts)';}
+  else if(total<=14){nivel.classList.add('rs-medio');nivel.textContent='⚠️ Riesgo MEDIO (8-14pts)';}
+  else{nivel.classList.add('rs-alto');nivel.textContent='🔴 Riesgo ALTO (15-21pts)';}
+  return {total,detalle};
+}
+function saveRiesgo(){
+  const empresa=document.getElementById('r-empresa').value.trim();const trab=document.getElementById('r-trabajador').value.trim();
+  if(!empresa||!trab){toast('Patrón y persona trabajadora son obligatorios','error');return;}
+  const result=calcRiesgo();
+  const nivel=result.total<=7?'Bajo':result.total<=14?'Medio':'Alto';
+  const r={empresa,trabajador:trab,puesto:document.getElementById('r-puesto').value,area:document.getElementById('r-area').value,
+    puntaje:result.total,nivel,detalle:result.detalle,obs:document.getElementById('r-obs').value,
+    fecha:new Date().toLocaleDateString('es-MX'),id:Date.now()};
+  db.riesgos.push(r);persist();toast(`✅ Evaluación de riesgo guardada — Nivel: ${nivel} (${result.total}pts)`);
+}
+function clearRiesgo(){
+  ['r-empresa','r-trabajador','r-puesto','r-area','r-obs'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('input[name^="c"]').forEach(r=>r.checked=false);
+  document.getElementById('riesgo-result').classList.remove('visible');
+}
+
+// ── RECORRIDO ──
+function saveRecorrido(){/* panel removed */}
+function clearRecorrido(){/* panel removed */}
+function deleteRecorrido(id){if(confirm('¿Eliminar esta acta?')){db.recorridos=db.recorridos.filter(r=>r.id!==id);persist();renderRecorridos();toast('Acta eliminada');}}
+
+// ── PAUSAS ──
+function savePausa(){/* panel removed */}
+function clearPausa(){/* panel removed */}
+
+// ── DB RENDER ──
+function renderDB(){
+  const cls=p=>p>=80?'badge-high':p>=50?'badge-mid':'badge-low';
+  const de=document.getElementById('bd-empresas');
+  if(de){
+    if(!db.empresas.length){de.innerHTML='<div class="empty-state"><div class="empty-icon">🏢</div><div class="empty-title">Sin patrones registrados</div></div>';}
+    else{de.innerHTML='<div class="table-wrap"><table class="data-table"><thead><tr><th>Tipo</th><th>Nombre / Razón social</th><th>RFC</th><th>Reg. Patronal</th><th>Municipio</th><th>Estado</th><th>Sector</th><th></th></tr></thead><tbody>'+
+      db.empresas.map(e=>`<tr><td>${e.tipoPerson==='moral'?'Moral':'Física'}</td><td><strong>${e.razon}</strong></td><td style="font-family:monospace">${e.rfc||'—'}</td><td style="font-family:monospace">${e.regpat||'—'}</td><td>${e.municipio||'—'}</td><td>${e.estado||'—'}</td><td>${e.sector||'—'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteEmpresa(${e.id})">✕</button></td></tr>`).join('')+
+      '</tbody></table></div>';}
+  }
+  const dv=document.getElementById('bd-evals');
+  if(dv){
+    if(!db.evaluaciones.length){dv.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin evaluaciones</div></div>';}
+    else{dv.innerHTML='<div class="table-wrap"><table class="data-table"><thead><tr><th>Empresa</th><th>Puesto</th><th>Trabajador/a</th><th>Bipedestación</th><th>Cumplimiento</th><th>Fecha</th><th></th></tr></thead><tbody>'+
+      db.evaluaciones.map(e=>`<tr><td>${e.empresa}</td><td>${e.puesto}</td><td>${e.trabajador||'—'}</td><td>${e.bipedestacion||'—'}</td><td><span class="badge ${cls(e.pct)}">${e.pct}%</span></td><td>${e.fecha||'—'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteEval(${e.id})">✕</button></td></tr>`).join('')+
+      '</tbody></table></div>';}
+  }
+  const dr=document.getElementById('bd-riesgos');
+  if(dr){
+    if(!db.riesgos.length){dr.innerHTML='<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Sin evaluaciones de riesgo</div></div>';}
+    else{const rcl=n=>n==='Bajo'?'badge-high':n==='Medio'?'badge-mid':'badge-low';
+      dr.innerHTML='<div class="table-wrap"><table class="data-table"><thead><tr><th>Empresa</th><th>Trabajador/a</th><th>Puesto</th><th>Puntaje</th><th>Nivel</th><th>Fecha</th><th></th></tr></thead><tbody>'+
+      db.riesgos.map(r=>`<tr><td>${r.empresa}</td><td>${r.trabajador}</td><td>${r.puesto||'—'}</td><td style="font-size:15px;font-weight:700">${r.puntaje}/21</td><td><span class="badge ${rcl(r.nivel)}">${r.nivel}</span></td><td>${r.fecha||'—'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteRiesgo(${r.id})">✕</button></td></tr>`).join('')+
+      '</tbody></table></div>';}
+  }
+}
+
+function deleteEmpresa(id){if(confirm('¿Eliminar?')){db.empresas=db.empresas.filter(e=>e.id!==id);persist();renderDB();toast('Patrón eliminado');}}
+function deleteEval(id){if(confirm('¿Eliminar?')){db.evaluaciones=db.evaluaciones.filter(e=>e.id!==id);persist();renderDB();toast('Evaluación eliminada');}}
+function deleteRiesgo(id){if(confirm('¿Eliminar?')){db.riesgos=db.riesgos.filter(r=>r.id!==id);persist();renderDB();toast('Evaluación eliminada');}}
+function clearAll(){db={empresas:[],evaluaciones:[],riesgos:[],recorridos:[],pausas:[],tipoPerson:'moral'};persist();renderDB();renderPausas();renderRecorridos();toast('Base de datos borrada');}
+
+// ── KPIs ──
+function updateKPIs(){
+  sv2('k-emp',db.empresas.length);
+  sv2('k-eva',db.evaluaciones.length);
+  if(db.evaluaciones.length>0){const avg=Math.round(db.evaluaciones.reduce((a,e)=>a+e.pct,0)/db.evaluaciones.length);sv2('k-cum',avg+'%');}
+  else sv2('k-cum','—');
+}
+updateKPIs();
+
+// ── RECENT ──
+function renderRecent(){
+  const div=document.getElementById('recent-evals');
+  if(!db.evaluaciones.length){div.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin evaluaciones</div><div class="empty-desc">Ve a "Evaluar puesto" para comenzar</div></div>';return;}
+  const cls=p=>p>=80?'high':p>=50?'mid':'low';
+  div.innerHTML='<div class="table-wrap"><table class="data-table"><thead><tr><th>Patrón</th><th>Puesto</th><th>Trabajador/a</th><th>Cumplimiento</th><th>Fecha</th></tr></thead><tbody>'+
+    db.evaluaciones.slice(-6).reverse().map(e=>`<tr><td>${e.empresa}</td><td>${e.puesto}</td><td>${e.trabajador||'—'}</td><td><span class="badge badge-${cls(e.pct)}">${e.pct}%</span></td><td>${e.fecha}</td></tr>`).join('')+'</tbody></table></div>';
+}
+
+// ── SELECT REPORTE ──
+function populateSelect(){
+  const sel=document.getElementById('rco');if(!sel)return;
+  sel.innerHTML='<option value="">— Todos los colaboradores —</option>';
+  db.empresas.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=`${e.razon} (${e.rfc||'RFC N/A'})`;sel.appendChild(o);});
+}
+
+
+// ── REPORTE ──
+function buildReportText(evaluador){
+  // Build report text (called internally — not shown to user as raw text)
+  const eid=''; // always full report
+  const fecha=new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+  const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1]:null;
+  const evals=db.evaluaciones;
+  const riesgos=db.riesgos;
+  const recorrs=db.recorridos;
+  const pausas=db.pausas;
+  const avgPct=evals.length>0?Math.round(evals.reduce((a,e)=>a+e.pct,0)/evals.length):0;
+  const nivel=avgPct>=80?'ALTO ✅':avgPct>=50?'MEDIO ⚠️':'BAJO 🔴';
+
+  let txt='';
+  txt+='══════════════════════════════════════════════════════════════════\n';
+  txt+='  INFORME DE CUMPLIMIENTO — LEY SILLA MÉXICO\n';
+  txt+='  Reforma LFT (DOF 19-dic-2024) · Disposiciones STPS (DOF 17-jul-2025)\n';
+  txt+='══════════════════════════════════════════════════════════════════\n\n';
+  txt+=`Fecha             : ${fecha}\nElaborado por     : ${evaluador||'No especificado'}\n\n`;
+
+  if(empresa){
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    txt+='1. DATOS DEL PATRÓN / CENTRO DE TRABAJO\n';
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    txt+=`Persona ${empresa.tipoPerson==='moral'?'Moral':'Física'}\n`;
+    txt+=`${empresa.tipoPerson==='moral'?'Razón social  ':'Nombre        '}: ${empresa.razon}\n`;
+    txt+=`RFC              : ${empresa.rfc||'N/A'}\nReg. Patronal    : ${empresa.regpat||'N/A'}\n`;
+    txt+=`Actividad        : ${empresa.actividad||'N/A'} | Sector: ${empresa.sector||'N/A'}\n`;
+    txt+=`Clase riesgo     : ${empresa.riesgoClase||'N/A'} | Trabajadores: ${empresa.emp||'N/A'}\n`;
+    txt+=`Domicilio        : ${empresa.calle||'N/A'}, Col. ${empresa.colonia||'N/A'}, C.P. ${empresa.cp||'N/A'}\n`;
+    txt+=`Municipio/Estado : ${empresa.municipio||'N/A'}, ${empresa.estado||'N/A'}\n\n`;
+  }
+
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+='2. RESUMEN EJECUTIVO\n';
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+=`Puestos evaluados     : ${evals.length}\nEvaluaciones de riesgo: ${riesgos.length}\n`;
+  txt+=`Actas de recorrido    : ${recorrs.length}\nPausas documentadas   : ${pausas.length}\n`;
+  txt+=`Cumplimiento promedio : ${avgPct}% — ${nivel}\n\n`;
+
+  if(evals.length>0){
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    txt+='3. EVALUACIONES POR PUESTO DE TRABAJO\n';
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    evals.forEach((e,i)=>{
+      txt+=`\n[${i+1}] Puesto: ${e.puesto} | Trabajador/a: ${e.trabajador||'N/A'} | Área: ${e.area||'N/A'}\n`;
+      txt+=`    Jornada: ${e.jornada||'N/A'} | Bipedestación: ${e.bipedestacion||'N/A'}\n`;
+      txt+=`    Cumplimiento: ${e.pct}% (${(e.cumple||[]).length}/${ITEMS.length} ítems)\n`;
+      if(e.noCumple&&e.noCumple.length>0)txt+=`    Ítems incumplidos (N°): ${e.noCumple.join(', ')}\n`;
+      if(e.hallazgos)txt+=`    Hallazgos: ${e.hallazgos}\n`;
+      if(e.correctivas)txt+=`    Correctivas: ${e.correctivas}\n`;
+    });txt+='\n';
+  }
+
+  if(riesgos.length>0){
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    txt+='4. NIVEL DE RIESGO POR BIPEDESTACIÓN (DISPOSICIÓN QUINTA STPS)\n';
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    riesgos.forEach((r,i)=>{
+      txt+=`\n[${i+1}] ${r.trabajador} | ${r.puesto||'—'} | ${r.area||'—'}\n`;
+      txt+=`    Puntaje: ${r.puntaje}/21 pts — Nivel: ${r.nivel}\n`;
+      if(r.obs)txt+=`    Obs: ${r.obs}\n`;
+    });txt+='\n';
+  }
+
+  if(recorrs.length>0){
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    txt+='5. ACTAS DE RECORRIDO DE VERIFICACIÓN\n';
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    recorrs.forEach((r,i)=>{
+      txt+=`\n[${i+1}] Fecha: ${r.fecha||'—'} | Área: ${r.area||'—'} | Trabajador/a: ${r.trabajador||'—'}\n`;
+      txt+=`    Bipedestación: ${r.bipe||'—'} | Tiempo continuo: ${r.tiempo||'?'}h\n`;
+      txt+=`    Evaluador: ${r.evaluador} (${r.cargo||'—'})\n`;
+      if(r.piso)txt+=`    Tipo de piso: ${r.piso}\n`;
+      if(r.riesgos)txt+=`    Riesgos: ${r.riesgos}\n`;
+      if(r.medidas)txt+=`    Medidas: ${r.medidas}\n`;
+    });txt+='\n';
+  }
+
+  if(pausas.length>0){
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    txt+='6. BITÁCORA DE PAUSAS ACTIVAS\n';
+    txt+='──────────────────────────────────────────────────────────────────\n';
+    pausas.slice(0,20).forEach((p,i)=>{
+      txt+=`[${i+1}] ${p.trabajador} | ${p.fecha||'—'} ${p.inicio?'a las '+p.inicio:''} | ${p.duracion||'?'} min | ${p.tipo||'—'}\n`;
+    });
+    if(pausas.length>20)txt+=`...y ${pausas.length-20} pausas adicionales.\n`;
+    txt+='\n';
+  }
+
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+='7. MARCO NORMATIVO APLICABLE\n';
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+='• Art. 132 LFT — Obligación del patrón de proveer sillas con respaldo\n';
+  txt+='• Art. 133 LFT — Prohibición de obligar a permanecer de pie toda la jornada\n';
+  txt+='• Art. 422 y 423 LFT — Reglamento interior de trabajo\n';
+  txt+='• DOF 19-dic-2024 — Decreto de reforma a la LFT (Ley Silla)\n';
+  txt+='• DOF 17-jul-2025 — Disposiciones STPS sobre factores de riesgo en bipedestación\n';
+  txt+='• NOM-030-STPS-2009 — Servicios preventivos de seguridad y salud\n';
+  txt+='• Plazo reglamento interior: 14-dic-2025 · Multas: hasta 2,500 UMA\n\n';
+
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+='8. RECOMENDACIONES\n';
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  if(avgPct<80){
+    txt+='• Proveer sillas ergonómicas con respaldo en todos los puestos en bipedestación.\n';
+    txt+='• Actualizar el Reglamento Interior de Trabajo antes del 14-dic-2025.\n';
+    txt+='• Establecer programa formal de pausas activas con periodicidad definida.\n';
+    txt+='• Realizar evaluación del nivel de riesgo con las 7 condicionantes STPS.\n';
+    txt+='• Habilitar y señalizar áreas específicas de descanso sentado.\n';
+    txt+='• Conservar actas de recorrido como evidencia documental ante inspección STPS.\n';
+  } else {
+    txt+='• Mantener los controles implementados e incluirlos en el programa SST.\n';
+    txt+='• Asegurar que el Reglamento Interior esté actualizado antes del 14-dic-2025.\n';
+    txt+='• Continuar el registro sistemático de pausas activas y actas de recorrido.\n';
+    txt+='• Preparar documentación para inspecciones STPS programadas en 2026.\n';
+  }
+  txt+=`\n══════════════════════════════════════════════════════════════════\n`;
+  txt+=`Responsable: ${evaluador||'_______________________________'}\n`;
+  txt+=`Fecha: ${fecha}\nFirma: _______________________________\n`;
+  txt+='══════════════════════════════════════════════════════════════════\n';
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+='Insignia AGC — Consultoría en Seguridad Laboral\n';
+  txt+='www.insigniaagc.com\n';
+  txt+='Sistema Ley Silla MX v2.1 — Reforma LFT · DOF 19-dic-2024 · México\n';
+  return txt;
+}
+
+function generarYImprimir(){
+  const evaluador=document.getElementById('rev').value||'';
+  const txt=buildReportText(evaluador);
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Reporte Ley Silla — Insignia AGC</title>
+  <style>
+    body{font-family:'Courier New',monospace;font-size:12px;padding:28px;white-space:pre-wrap;line-height:1.7;color:#1a1f2e}
+    @media print{body{padding:0}}
+  </style></head><body>${txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</body></html>`);
+  w.document.close();
+  setTimeout(()=>w.print(),400);
+  toast('✅ Reporte listo — se abrió la ventana de impresión','success');
+}
+
+function generarYCopiar(){
+  const evaluador=document.getElementById('rev').value||'';
+  const txt=buildReportText(evaluador);
+  navigator.clipboard.writeText(txt)
+    .then(()=>toast('✅ Reporte copiado al portapapeles','success'))
+    .catch(()=>toast('Usa el botón de imprimir para obtener el reporte','error'));
+}
+
+// Keep legacy aliases in case called from elsewhere
+function generateReport(){generarYImprimir();}
+function copyReport(){generarYCopiar();}
+function printReport(){generarYImprimir();}
+
+
+// ── EXPORT ──
+function exportCSV(){
+  let csv='Tipo,Patrón,RFC,Reg.Patronal,Estado,Municipio,Puesto,Trabajador,Bipedestación,Cumplimiento%,RiesgoNivel,Fecha\n';
+  db.evaluaciones.forEach(e=>{
+    const emp=db.empresas.find(x=>x.razon===e.empresa)||{};
+    csv+=`Evaluación,"${e.empresa}","${emp.rfc||''}","${emp.regpat||''}","${emp.estado||''}","${emp.municipio||''}","${e.puesto}","${e.trabajador||''}","${e.bipedestacion||''}",${e.pct},"","${e.fecha||''}"\n`;
+  });
+  db.riesgos.forEach(r=>{csv+=`Riesgo,"${r.empresa}","","","","","${r.puesto||''}","${r.trabajador}","",,"${r.nivel} (${r.puntaje}pts)","${r.fecha||''}"\n`;});
+  download(csv,'ley_silla_mx.csv','text/csv');toast('✅ CSV exportado');
+}
+function exportJSON(){download(JSON.stringify(db,null,2),'ley_silla_mx_bd.json','application/json');toast('✅ JSON exportado');}
+function download(content,name,type){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+// ── GOOGLE SHEETS INTEGRATION ──
+async function sendToSheets(tipo, datos){
+  if(!SHEETS_WEBHOOK)return;
+  try{
+    const patron=db.empresas.length>0?{razon:db.empresas[db.empresas.length-1].razon,rfc:db.empresas[db.empresas.length-1].rfc,municipio:db.empresas[db.empresas.length-1].municipio,estado:db.empresas[db.empresas.length-1].estado}:null;
+    const payload={tipo,timestamp:new Date().toISOString(),patron,datos};
+    await fetch(SHEETS_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  }catch(e){console.warn('Sheets send error:',e.message);}
+}
+async function testSheets(){
+  if(!SHEETS_WEBHOOK){toast('Webhook no configurado en el código fuente','error');return;}
+  toast('Enviando prueba a Google Sheets...','success');
+  await sendToSheets('TEST',{mensaje:'Prueba de conexión desde Ley Silla — Insignia AGC',fecha:new Date().toLocaleDateString('es-MX')});
+  setTimeout(()=>toast('✅ Datos enviados. Revisa tu Google Sheet para confirmar.','success'),800);
+}
+async function syncAllToSheets(){
+  if(!SHEETS_WEBHOOK){toast('Webhook no configurado en el código fuente','error');return;}
+  toast('Sincronizando todos los datos...','success');
+  for(const e of db.empresas)await sendToSheets('PATRON',e);
+  for(const e of db.evaluaciones)await sendToSheets('EVALUACION',e);
+  for(const r of db.riesgos)await sendToSheets('RIESGO',r);
+  for(const r of db.recorridos)await sendToSheets('ACTA',r);
+  for(const p of db.pausas)await sendToSheets('PAUSA',p);
+  toast(`✅ Sincronizados: ${db.empresas.length} patrones, ${db.evaluaciones.length} evaluaciones, ${db.riesgos.length} riesgos, ${db.recorridos.length} actas, ${db.pausas.length} pausas`,'success');
+}
+function updateSheetsBanner(){
+  const el=document.getElementById('sheets-status-banner');if(!el)return;
+  if(db.sheetsUrl){
+    el.innerHTML='<div class="alert alert-success"><span class="alert-icon">✅</span> <span>Google Sheets conectado — Los datos se envían automáticamente con cada registro.</span></div>';
+  } else {
+    el.innerHTML='<div class="alert alert-warn"><span class="alert-icon">⚠️</span> <span>Sin conexión a Google Sheets. Configura la URL del Apps Script para respaldo automático en la nube.</span></div>';
+  }
+}
+
+// ── PATRON BANNER EN SUB-PANELES ──
+function getPatronBannerHtml(){
+  if(!db.empresas.length)return'<div class="alert alert-warn"><span class="alert-icon">⚠️</span> <span>Sin patrón registrado. Los datos del patrón se tomarán del último registro en "Registro del patrón".</span></div>';
+  const p=db.empresas[db.empresas.length-1];
+  return`<div style="background:linear-gradient(90deg,rgba(13,37,69,.03),rgba(34,113,195,.06));border:1px solid rgba(34,113,195,.15);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <div><div style="font-size:9.5px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.3px">Patrón activo</div><div style="font-size:13px;font-weight:600;color:var(--navy);margin-top:1px">${p.razon}</div></div>
+    <div><div style="font-size:9.5px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.3px">RFC</div><div style="font-size:12px;font-weight:600;color:var(--navy);font-family:monospace;margin-top:1px">${p.rfc||'—'}</div></div>
+    <div><div style="font-size:9.5px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.3px">Reg. Patronal</div><div style="font-size:12px;font-weight:600;color:var(--navy);font-family:monospace;margin-top:1px">${p.regpat||'—'}</div></div>
+    <div><div style="font-size:9.5px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.3px">Municipio / Estado</div><div style="font-size:12px;font-weight:600;color:var(--navy);margin-top:1px">${p.municipio||'—'}, ${p.estado||'—'}</div></div>
+  </div>`;
+}
+function showPatronBanners(){
+  ['eval-patron-banner','riesgo-patron-banner','acta-patron-banner','pausas-patron-banner'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.innerHTML=getPatronBannerHtml();
+  });
+}
+
+// ── MULTI-EVAL HISTORY ──
+function updateEvalHistory(){
+  const sec=document.getElementById('eval-history-section');
+  const list=document.getElementById('eval-history-list');
+  if(!sec||!list)return;
+  if(!db.evaluaciones.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  const cls=p=>p>=80?'badge-high':p>=50?'badge-mid':'badge-low';
+  list.innerHTML=db.evaluaciones.slice(-8).reverse().map(e=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--gray1);border:1px solid var(--gray2);border-radius:var(--radius);margin-bottom:6px">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;color:var(--navy)">${e.puesto}</div>
+        <div style="font-size:11.5px;color:var(--gray4)">${e.trabajador||'—'} · ${e.area||'—'} · ${e.fecha||'—'}</div>
+      </div>
+      <span class="badge ${cls(e.pct)}">${e.pct}%</span>
+    </div>`).join('');
+}
+
+// ── SAVE AND NEW EVAL ──
+function saveAndNewEval(){
+  saveEval();
+  setTimeout(()=>{
+    clearEval();
+    updateEvalHistory();
+    window.scrollTo({top:0,behavior:'smooth'});
+    toast('✅ Guardado. Formulario listo para el siguiente colaborador.','success');
+  },300);
+}
+
+renderRecent();
+updateEvalHistory();
+</script>
+</body>
+</html>
