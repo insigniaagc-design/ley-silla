@@ -160,7 +160,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
 .btn-sm{padding:5px 11px;font-size:12px}
 
 /* ALERT */
-.alert{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;border-radius:var(--radius);margin-bottom:14px;font-size:13px;line-height:1.5}
+.alert{display:flex;align-items:flex-start;gap:8px;padding:11px 14px;border-radius:var(--radius);margin-bottom:14px;font-size:13px;line-height:1.6;flex-wrap:wrap}
 .alert-info{background:var(--sky2);border:1px solid rgba(79,168,232,.3);color:var(--blue)}
 .alert-warn{background:var(--gold2);border:1px solid rgba(201,136,42,.3);color:var(--gold)}
 .alert-success{background:var(--green2);border:1px solid rgba(26,122,74,.2);color:var(--green)}
@@ -327,7 +327,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
     <div id="panel-empresa" class="panel">
       <div class="card">
         <div class="card-header"><div class="card-icon ci-blue">🏢</div><div><div class="card-title">Registro del patrón / Centro de trabajo</div><div class="card-desc">Datos del empleador conforme al Art. 132 LFT reformado</div></div></div>
-        <div class="alert alert-info"><span class="alert-icon">💡</span> Campos con <strong>*</strong> son obligatorios. Esta información formará parte del acta de recorrido y del reporte para la STPS.</div>
+        <div class="alert alert-info"><span class="alert-icon">💡</span> Esta información formará parte de su reporte de cumplimiento Ley Silla.</div>
 
         <div class="section-label">Tipo de persona y datos fiscales</div>
         <div class="tipo-persona">
@@ -408,7 +408,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
       <div class="card">
         <div class="card-header"><div class="card-icon ci-teal">📋</div><div><div class="card-title">Datos del puesto de trabajo</div><div class="card-desc">Completa un formulario por cada persona trabajadora</div></div></div>
         <div id="eval-patron-banner" style="margin-bottom:14px"></div>
-        <div class="alert alert-info"><span class="alert-icon">💡</span> Responde según lo que <strong>tú vives en tu puesto de trabajo</strong>. Cuando termines puedes guardar y agregar a otro colaborador.</div>
+        <div class="alert alert-info" style="display:block;line-height:1.6">💡 Responde según lo que vives en tu puesto de trabajo. Cuando termines puedes guardar y evaluar a otro colaborador.</div>
         <div class="form-grid">
           <div class="field"><label>Nombre del puesto *</label><input id="ev-puesto" placeholder="Cajero/a, Vendedor/a, Vigilante..."></div>
           <div class="field"><label>Nombre de la persona trabajadora</label><input id="ev-trabajador" placeholder="Nombre completo"></div>
@@ -434,7 +434,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
       <div class="card">
         <div class="card-header"><div class="card-icon ci-teal">✅</div><div><div class="card-title">Lista de verificación de cumplimiento</div><div class="card-desc">Marca según lo observado en campo durante el recorrido</div></div></div>
         <div class="check-wrap">
-          <div class="check-head"><div>N°</div><div>Ítem de verificación (Art. 132 y 133 LFT)</div><div style="text-align:center">Sí ✅</div><div style="text-align:center">No ❌</div></div>
+          <div class="check-head"><div>N°</div><div>Condición de trabajo en mi puesto</div><div style="text-align:center">Sí ✅</div><div style="text-align:center">No ❌</div></div>
           <div id="checklist-body"></div>
         </div>
         <div class="score-wrap" id="score-wrap">
@@ -465,7 +465,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
     <div id="panel-riesgo" class="panel">
       <div class="card">
         <div class="card-header"><div class="card-icon ci-red">📊</div><div><div class="card-title">Determinación del nivel de riesgo por bipedestación</div><div class="card-desc">Disposición Quinta · 7 condicionantes STPS · DOF 17-jul-2025</div></div></div>
-        <div class="alert alert-info"><span class="alert-icon">📋</span> Responde cada pregunta según <strong>tu situación real y actual</strong> en tu puesto de trabajo. No hay respuestas correctas o incorrectas.</div>
+        <div class="alert alert-info" style="display:block;line-height:1.6">📋 Responde cada pregunta según tu situación real y actual en tu puesto de trabajo. No hay respuestas correctas o incorrectas.</div>
         <div id="riesgo-patron-banner" style="margin-bottom:14px"></div>
         <div class="form-grid">
           <div class="field"><label>Persona trabajadora *</label><input id="r-trabajador" placeholder="Nombre completo"></div>
@@ -532,23 +532,22 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
 <script>
 // ── CHECKLIST ITEMS ──
 const ITEMS = [
-  "El patrón proporciona sillas con respaldo suficientes para las personas trabajadoras (Art. 132 LFT)",
-  "Los asientos son adecuados al puesto y permiten que los pies toquen el suelo (90° en rodillas)",
-  "Los respaldos cuentan con soporte lumbar flexible adaptado a la columna vertebral",
-  "Se han designado áreas específicas para el descanso sentado durante la jornada",
-  "El patrón NO obliga a permanecer de pie durante TODA la jornada laboral (Art. 133 LFT)",
-  "El patrón NO prohíbe tomar asiento periódicamente durante el desarrollo de funciones",
-  "Se cuenta con programa de pausas activas conforme al análisis de riesgo por bipedestación",
-  "Las pausas son periódicas y efectivas (no sólo de segundos)",
-  "Se permite la alternancia entre postura de pie y postura sentada",
-  "El mobiliario (sillas, bancos, reposapiés) está en buen estado y condiciones higiénicas",
-  "El reglamento interior de trabajo incluye normas sobre el uso de sillas (Art. 423 LFT)",
-  "La Comisión de Seguridad e Higiene ha realizado recorridos y levantado actas de verificación",
-  "Se han registrado los once elementos exigidos por la Disposición Quinta (Apdo. C) STPS",
-  "Se ha evaluado el nivel de riesgo por bipedestación con las 7 condicionantes STPS",
-  "Las personas trabajadoras han sido informadas sobre los riesgos de la bipedestación",
-  "Las áreas de descanso con asientos están debidamente señalizadas",
-  "Se ha canalizado a atención médica a quienes presentan síntomas por bipedestación prolongada"
+  {t:"¿Tienes acceso a una silla con respaldo en tu área de trabajo?", h:"La Ley Silla obliga al patrón a proveer sillas con respaldo para quienes trabajan de pie (Art. 132 LFT)."},
+  {t:"Cuando te sientas, ¿tus pies tocan el suelo y tus rodillas forman un ángulo cómodo?", h:"Un asiento bien regulado evita tensión en piernas y espalda baja. Los pies deben apoyar planos en el suelo."},
+  {t:"¿El respaldo de tu silla te da soporte en la parte baja de la espalda (zona lumbar)?", h:"El soporte lumbar reduce el riesgo de dolor de espalda al estar sentado periódicamente durante la jornada."},
+  {t:"¿Existe un área habilitada donde puedas sentarte a descansar durante tu turno?", h:"El patrón debe designar un espacio específico para el descanso sentado, señalizado y accesible."},
+  {t:"¿Tu empleador te permite sentarte en algún momento durante tu turno?", h:"Ningún patrón puede obligar a sus trabajadores a permanecer de pie durante toda la jornada (Art. 133 LFT)."},
+  {t:"¿Puedes tomar asiento periódicamente sin que tu jefe o la empresa te lo prohíba?", h:"Prohibir explícitamente sentarse es una violación directa a la Ley Silla, independientemente del puesto."},
+  {t:"¿Existen pausas de descanso programadas y definidas durante tu jornada?", h:"Las pausas deben estar establecidas en el programa de seguridad y salud en el trabajo, no ser informales."},
+  {t:"¿Esas pausas duran tiempo suficiente para recuperarte (más que unos pocos segundos)?", h:"Una pausa efectiva es de al menos 5-10 minutos. Pausas de segundos no cumplen con la normativa STPS."},
+  {t:"¿Puedes alternar entre estar de pie y sentado/a a lo largo de tu jornada?", h:"La alternancia de posturas reduce significativamente los riesgos de lesiones por bipedestación prolongada."},
+  {t:"¿Las sillas y el mobiliario de descanso están en buen estado y limpios?", h:"El equipo en mal estado o sucio incumple con las condiciones mínimas de higiene y seguridad laboral."},
+  {t:"¿Tu empresa tiene un reglamento interno que mencione el derecho a usar sillas?", h:"El Reglamento Interior de Trabajo debe incluir el derecho a sentarse conforme al Art. 423 LFT. Plazo: 14-dic-2025."},
+  {t:"¿Te han informado sobre los riesgos de trabajar de pie por mucho tiempo?", h:"Varices, dolor lumbar, fatiga y problemas circulatorios son riesgos documentados de la bipedestación prolongada."},
+  {t:"¿Existe señalización visible en tu área que indique dónde puedes descansar?", h:"La señalización de áreas de descanso es parte de los elementos que verifica la STPS en sus inspecciones."},
+  {t:"¿Has recibido alguna capacitación sobre cómo cuidar tu cuerpo al trabajar de pie?", h:"La capacitación en ergonomía y pausas activas es obligación del patrón conforme a la NOM-030-STPS-2009."},
+  {t:"Si sientes dolor o molestia por estar de pie, ¿tu empresa te da atención o seguimiento médico?", h:"El patrón debe canalizar a atención médica a quienes presenten síntomas derivados de la bipedestación."},
+  {t:"¿Sabes si tu empresa cuenta con una Comisión de Seguridad e Higiene que realice recorridos?", h:"La Comisión de Seguridad e Higiene es el grupo interno que supervisa las condiciones de trabajo. Debe hacer recorridos mensuales (NOM-019-STPS-2011)."}
 ];
 
 // ── CONDICIONANTES STPS (7) ──
@@ -659,14 +658,13 @@ function setTipo(tipo){
 
 // ── CHECKLIST BUILD ──
 function buildChecklist(){
-  const body=document.getElementById('checklist-body');body.innerHTML='';
+  const b=document.getElementById('checklist-body');if(!b)return;b.innerHTML='';
   ITEMS.forEach((item,i)=>{
     const row=document.createElement('div');row.className='check-row';
-    row.innerHTML=`<div class="check-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="check-text">${item}</div>
-      <div class="check-center r-si"><input type="radio" name="item${i}" value="si" onchange="calcScore()"></div>
-      <div class="check-center r-no"><input type="radio" name="item${i}" value="no" onchange="calcScore()"></div>`;
-    body.appendChild(row);
+    const txt=typeof item==='object'?item.t:item;
+    const hlp=typeof item==='object'&&item.h?`<div style="font-size:11.5px;color:var(--gray4);margin-top:3px;line-height:1.4;font-weight:400">${item.h}</div>`:'';
+    row.innerHTML=`<div class="check-num">${String(i+1).padStart(2,'0')}</div><div class="check-text">${txt}${hlp}</div><div class="check-center r-si"><input type="radio" name="ci${i}" value="si" onchange="calcScore()"></div><div class="check-center r-no"><input type="radio" name="ci${i}" value="no" onchange="calcScore()"></div>`;
+    b.appendChild(row);
   });
 }
 buildChecklist();
