@@ -688,7 +688,7 @@ buildCondicionantes();
 
 // ── SCORE ──
 function calcScore(){
-  let si=0;ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="item${i}"]:checked`);if(v&&v.value==='si')si++;});
+  let si=0;ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="ci${i}"]:checked`);if(v&&v.value==='si')si++;});
   const pct=Math.round((si/ITEMS.length)*100);
   const wrap=document.getElementById('score-wrap'),fill=document.getElementById('score-fill'),status=document.getElementById('score-status');
   wrap.classList.add('visible');
@@ -722,21 +722,22 @@ function clearEmpresa(){['e-razon','e-rfc','e-regpat','e-actividad','e-emp','e-c
 
 // ── EVALUACIÓN ──
 function saveEval(){
-  const empresa=document.getElementById('ev-empresa').value.trim();const puesto=document.getElementById('ev-puesto').value.trim();
-  if(!empresa||!puesto){toast('Patrón y puesto son obligatorios','error');return;}
+  const puesto=document.getElementById('ev-puesto').value.trim();
+  if(!puesto){toast('El nombre del puesto es obligatorio','error');return;}
+  const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1].razon:'(Sin patrón registrado)';
   let cumple=[],noCumple=[];
-  ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="item${i}"]:checked`);if(v){if(v.value==='si')cumple.push(i+1);else noCumple.push(i+1);}});
+  ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="ci${i}"]:checked`);if(v){if(v.value==='si')cumple.push(i+1);else noCumple.push(i+1);}});
   const pct=Math.round((cumple.length/ITEMS.length)*100);
   const r={empresa,puesto,trabajador:document.getElementById('ev-trabajador').value,area:document.getElementById('ev-area').value,
     jornada:document.getElementById('ev-jornada').value,bipedestacion:getBipedestacion(),cumple,noCumple,pct,
-    hallazgos:document.getElementById('ev-hallazgos').value,correctivas:document.getElementById('ev-correctivas').value,
+    hallazgos:document.getElementById('ev-hallazgos').value,correctivas:gv('ev-correctivas'),
     fecha:new Date().toLocaleDateString('es-MX'),id:Date.now()};
   db.evaluaciones.push(r);persist();toast(`✅ Evaluación guardada — Cumplimiento: ${pct}%`);
 }
 function clearEval(){
   ['ev-empresa','ev-puesto','ev-trabajador','ev-area','ev-hallazgos','ev-correctivas'].forEach(id=>document.getElementById(id).value='');
   sv3('ev-jornada','');
-  document.querySelectorAll('input[name^="item"],input[name="bipe"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('input[name^="ci"],input[name="bipe"]').forEach(r=>r.checked=false);
   document.getElementById('score-wrap').classList.remove('visible');
 }
 
@@ -759,8 +760,9 @@ function calcRiesgo(){
   return {total,detalle};
 }
 function saveRiesgo(){
-  const empresa=document.getElementById('r-empresa').value.trim();const trab=document.getElementById('r-trabajador').value.trim();
-  if(!empresa||!trab){toast('Patrón y persona trabajadora son obligatorios','error');return;}
+  const trab=document.getElementById('r-trabajador').value.trim();
+  if(!trab){toast('El nombre de la persona trabajadora es obligatorio','error');return;}
+  const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1].razon:'(Sin patrón registrado)';
   const result=calcRiesgo();
   const nivel=result.total<=7?'Bajo':result.total<=14?'Medio':'Alto';
   const r={empresa,trabajador:trab,puesto:document.getElementById('r-puesto').value,area:document.getElementById('r-area').value,
@@ -843,23 +845,33 @@ function populateSelect(){
 
 // ── REPORTE ──
 function buildReportText(evaluador){
-  // Build report text (called internally — not shown to user as raw text)
-  const eid=''; // always full report
   const fecha=new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
   const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1]:null;
   const evals=db.evaluaciones;
   const riesgos=db.riesgos;
-  const recorrs=db.recorridos;
-  const pausas=db.pausas;
   const avgPct=evals.length>0?Math.round(evals.reduce((a,e)=>a+e.pct,0)/evals.length):0;
   const nivel=avgPct>=80?'ALTO ✅':avgPct>=50?'MEDIO ⚠️':'BAJO 🔴';
 
   let txt='';
   txt+='══════════════════════════════════════════════════════════════════\n';
-  txt+='  INFORME DE CUMPLIMIENTO — LEY SILLA MÉXICO\n';
+  txt+='  DIAGNÓSTICO LEY SILLA — INSIGNIA AGC\n';
   txt+='  Reforma LFT (DOF 19-dic-2024) · Disposiciones STPS (DOF 17-jul-2025)\n';
   txt+='══════════════════════════════════════════════════════════════════\n\n';
   txt+=`Fecha             : ${fecha}\nElaborado por     : ${evaluador||'No especificado'}\n\n`;
+
+  txt+='⚠️  AVISO IMPORTANTE\n';
+  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+='El presente documento es un diagnóstico informativo elaborado con\n';
+  txt+='base en la información proporcionada por el centro de trabajo. No\n';
+  txt+='constituye un dictamen técnico ni una certificación de cumplimiento\n';
+  txt+='normativo, y no genera responsabilidad legal para Insignia AGC.\n';
+  txt+='Para obtener un diagnóstico completo, un acta de recorrido verificada\n';
+  txt+='o un programa de cumplimiento formal, se requiere una visita presencial\n';
+  txt+='por parte de un consultor certificado en Seguridad y Salud en el\n';
+  txt+='Trabajo. Insignia AGC ofrece estos servicios:\n';
+  txt+='  🌐 www.insigniaagc.com\n';
+  txt+='  📧 contacto@insigniaagc.com\n';
+  txt+='  📱 WhatsApp: 663 429 0003\n\n';
 
   if(empresa){
     txt+='──────────────────────────────────────────────────────────────────\n';
@@ -877,8 +889,8 @@ function buildReportText(evaluador){
   txt+='──────────────────────────────────────────────────────────────────\n';
   txt+='2. RESUMEN EJECUTIVO\n';
   txt+='──────────────────────────────────────────────────────────────────\n';
-  txt+=`Puestos evaluados     : ${evals.length}\nEvaluaciones de riesgo: ${riesgos.length}\n`;
-  txt+=`Actas de recorrido    : ${recorrs.length}\nPausas documentadas   : ${pausas.length}\n`;
+  txt+=`Puestos evaluados     : ${evals.length}\n`;
+  txt+=`Evaluaciones de riesgo: ${riesgos.length}\n`;
   txt+=`Cumplimiento promedio : ${avgPct}% — ${nivel}\n\n`;
 
   if(evals.length>0){
@@ -888,10 +900,9 @@ function buildReportText(evaluador){
     evals.forEach((e,i)=>{
       txt+=`\n[${i+1}] Puesto: ${e.puesto} | Trabajador/a: ${e.trabajador||'N/A'} | Área: ${e.area||'N/A'}\n`;
       txt+=`    Jornada: ${e.jornada||'N/A'} | Bipedestación: ${e.bipedestacion||'N/A'}\n`;
-      txt+=`    Cumplimiento: ${e.pct}% (${(e.cumple||[]).length}/${ITEMS.length} ítems)\n`;
+      txt+=`    Cumplimiento: ${e.pct}% (${(e.cumple||[]).length}/${ITEMS.length} ítems cumplidos)\n`;
       if(e.noCumple&&e.noCumple.length>0)txt+=`    Ítems incumplidos (N°): ${e.noCumple.join(', ')}\n`;
-      if(e.hallazgos)txt+=`    Hallazgos: ${e.hallazgos}\n`;
-      if(e.correctivas)txt+=`    Correctivas: ${e.correctivas}\n`;
+      if(e.hallazgos)txt+=`    Observaciones del colaborador: ${e.hallazgos}\n`;
     });txt+='\n';
   }
 
@@ -899,72 +910,64 @@ function buildReportText(evaluador){
     txt+='──────────────────────────────────────────────────────────────────\n';
     txt+='4. NIVEL DE RIESGO POR BIPEDESTACIÓN (DISPOSICIÓN QUINTA STPS)\n';
     txt+='──────────────────────────────────────────────────────────────────\n';
+    txt+='Esta evaluación analiza 7 factores del puesto: tiempo continuo de pie,\n';
+    txt+='posibilidad de cambiar de postura, tipo de superficie del piso,\n';
+    txt+='características del calzado, espacio disponible, malestares reportados\n';
+    txt+='y existencia de pausas programadas.\n\n';
     riesgos.forEach((r,i)=>{
-      txt+=`\n[${i+1}] ${r.trabajador} | ${r.puesto||'—'} | ${r.area||'—'}\n`;
-      txt+=`    Puntaje: ${r.puntaje}/21 pts — Nivel: ${r.nivel}\n`;
-      if(r.obs)txt+=`    Obs: ${r.obs}\n`;
-    });txt+='\n';
-  }
-
-  if(recorrs.length>0){
-    txt+='──────────────────────────────────────────────────────────────────\n';
-    txt+='5. ACTAS DE RECORRIDO DE VERIFICACIÓN\n';
-    txt+='──────────────────────────────────────────────────────────────────\n';
-    recorrs.forEach((r,i)=>{
-      txt+=`\n[${i+1}] Fecha: ${r.fecha||'—'} | Área: ${r.area||'—'} | Trabajador/a: ${r.trabajador||'—'}\n`;
-      txt+=`    Bipedestación: ${r.bipe||'—'} | Tiempo continuo: ${r.tiempo||'?'}h\n`;
-      txt+=`    Evaluador: ${r.evaluador} (${r.cargo||'—'})\n`;
-      if(r.piso)txt+=`    Tipo de piso: ${r.piso}\n`;
-      if(r.riesgos)txt+=`    Riesgos: ${r.riesgos}\n`;
-      if(r.medidas)txt+=`    Medidas: ${r.medidas}\n`;
-    });txt+='\n';
-  }
-
-  if(pausas.length>0){
-    txt+='──────────────────────────────────────────────────────────────────\n';
-    txt+='6. BITÁCORA DE PAUSAS ACTIVAS\n';
-    txt+='──────────────────────────────────────────────────────────────────\n';
-    pausas.slice(0,20).forEach((p,i)=>{
-      txt+=`[${i+1}] ${p.trabajador} | ${p.fecha||'—'} ${p.inicio?'a las '+p.inicio:''} | ${p.duracion||'?'} min | ${p.tipo||'—'}\n`;
+      const rcl=r.nivel==='Bajo'?'✅':r.nivel==='Medio'?'⚠️':'🔴';
+      txt+=`[${i+1}] ${r.trabajador} | Puesto: ${r.puesto||'—'} | Área: ${r.area||'—'}\n`;
+      txt+=`    Puntaje: ${r.puntaje}/21 pts — Nivel de riesgo: ${rcl} ${r.nivel}\n`;
+      if(r.obs)txt+=`    Observaciones: ${r.obs}\n`;
+      txt+='\n';
     });
-    if(pausas.length>20)txt+=`...y ${pausas.length-20} pausas adicionales.\n`;
-    txt+='\n';
   }
 
   txt+='──────────────────────────────────────────────────────────────────\n';
-  txt+='7. MARCO NORMATIVO APLICABLE\n';
+  txt+='5. MARCO NORMATIVO APLICABLE\n';
   txt+='──────────────────────────────────────────────────────────────────\n';
   txt+='• Art. 132 LFT — Obligación del patrón de proveer sillas con respaldo\n';
   txt+='• Art. 133 LFT — Prohibición de obligar a permanecer de pie toda la jornada\n';
   txt+='• Art. 422 y 423 LFT — Reglamento interior de trabajo\n';
   txt+='• DOF 19-dic-2024 — Decreto de reforma a la LFT (Ley Silla)\n';
-  txt+='• DOF 17-jul-2025 — Disposiciones STPS sobre factores de riesgo en bipedestación\n';
+  txt+='• DOF 17-jul-2025 — Disposiciones STPS sobre bipedestación\n';
   txt+='• NOM-030-STPS-2009 — Servicios preventivos de seguridad y salud\n';
-  txt+='• Plazo reglamento interior: 14-dic-2025 · Multas: hasta 2,500 UMA\n\n';
+  txt+='• NOM-019-STPS-2011 — Comisiones de seguridad e higiene\n\n';
 
   txt+='──────────────────────────────────────────────────────────────────\n';
-  txt+='8. RECOMENDACIONES\n';
+  txt+='6. RECOMENDACIONES\n';
   txt+='──────────────────────────────────────────────────────────────────\n';
   if(avgPct<80){
     txt+='• Proveer sillas ergonómicas con respaldo en todos los puestos en bipedestación.\n';
-    txt+='• Actualizar el Reglamento Interior de Trabajo antes del 14-dic-2025.\n';
-    txt+='• Establecer programa formal de pausas activas con periodicidad definida.\n';
-    txt+='• Realizar evaluación del nivel de riesgo con las 7 condicionantes STPS.\n';
+    txt+='• El plazo para actualizar el Reglamento Interior de Trabajo conforme a la\n';
+    txt+='  Ley Silla venció el 14 de diciembre de 2025. Si aún no se ha realizado esta\n';
+    txt+='  actualización, representa un incumplimiento vigente que debe atenderse de\n';
+    txt+='  manera urgente e inmediata.\n';
+    txt+='• Establecer un programa formal de pausas activas con horarios definidos y\n';
+    txt+='  documentados. Las pausas espontáneas o informales no son suficientes.\n';
+    txt+='• Realizar la evaluación formal del nivel de riesgo por bipedestación aplicando\n';
+    txt+='  las 7 condicionantes establecidas por la STPS (Disposición Quinta, DOF\n';
+    txt+='  17-jul-2025). Esta evaluación es obligatoria y determina las medidas\n';
+    txt+='  preventivas específicas que debe implementar cada puesto.\n';
     txt+='• Habilitar y señalizar áreas específicas de descanso sentado.\n';
-    txt+='• Conservar actas de recorrido como evidencia documental ante inspección STPS.\n';
+    txt+='• Levantar actas de recorrido con la Comisión de Seguridad e Higiene como\n';
+    txt+='  evidencia documental ante inspecciones STPS 2026.\n';
+    txt+='• Instalar tapetes antifatiga en puestos con piso de concreto o cerámica.\n';
   } else {
-    txt+='• Mantener los controles implementados e incluirlos en el programa SST.\n';
-    txt+='• Asegurar que el Reglamento Interior esté actualizado antes del 14-dic-2025.\n';
-    txt+='• Continuar el registro sistemático de pausas activas y actas de recorrido.\n';
+    txt+='• Mantener los controles implementados e integrarlos al programa SST anual.\n';
+    txt+='• Verificar que el Reglamento Interior de Trabajo esté actualizado conforme\n';
+    txt+='  a la Ley Silla. El plazo venció el 14 de diciembre de 2025 — si aún no\n';
+    txt+='  se ha actualizado, es un incumplimiento urgente.\n';
+    txt+='• Continuar el registro sistemático de pausas activas como evidencia documental.\n';
     txt+='• Preparar documentación para inspecciones STPS programadas en 2026.\n';
   }
+
   txt+=`\n══════════════════════════════════════════════════════════════════\n`;
   txt+=`Responsable: ${evaluador||'_______________________________'}\n`;
   txt+=`Fecha: ${fecha}\nFirma: _______________________________\n`;
-  txt+='══════════════════════════════════════════════════════════════════\n';
-  txt+='──────────────────────────────────────────────────────────────────\n';
+  txt+='══════════════════════════════════════════════════════════════════\n\n';
   txt+='Insignia AGC — Consultoría en Seguridad Laboral\n';
-  txt+='www.insigniaagc.com\n';
+  txt+='www.insigniaagc.com | contacto@insigniaagc.com | WhatsApp: 663 429 0003\n';
   txt+='Sistema Ley Silla MX v2.1 — Reforma LFT · DOF 19-dic-2024 · México\n';
   return txt;
 }
