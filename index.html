@@ -217,6 +217,16 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
 .divider{border:none;border-top:1px solid var(--gray2);margin:18px 0}
 .section-label{font-size:11px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:18px;padding-bottom:6px;border-bottom:1px solid var(--gray2)}
 
+.bipe-card{display:flex;align-items:flex-start;gap:0;padding:10px 12px;border:1.5px solid var(--gray3);border-radius:var(--radius);cursor:pointer;transition:var(--transition);background:var(--white)}
+.bipe-card:hover{border-color:var(--blue2);background:var(--sky2)}
+.bipe-card:has(input:checked){border-color:var(--blue2);background:var(--sky2)}
+.bipe-card input[type=radio]{margin-top:2px;accent-color:var(--blue2);flex-shrink:0}
+.bipe-content{display:flex;flex-direction:column;gap:2px;margin-left:8px}
+.bipe-icon{font-size:16px;line-height:1}
+.bipe-label{font-size:13px;font-weight:600;color:var(--navy)}
+.bipe-desc{font-size:11px;color:var(--gray4);line-height:1.3}
+@media(max-width:480px){.bipe-card{padding:8px 10px}}
+
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--navy);color:var(--white);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:.35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
@@ -414,19 +424,33 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
           <div class="field"><label>Nombre de la persona trabajadora</label><input id="ev-trabajador" placeholder="Nombre(s) · Apellido Paterno · Apellido Materno" onblur="this.value=capitalizarNombre(this.value)"></div>
           <div class="field"><label>Área o departamento</label><input id="ev-area" placeholder="Caja, Mostrador, Producción..."></div>
           <div class="field"><label>Tipo de jornada</label>
-            <select id="ev-jornada">
+            <select id="ev-jornada" onchange="toggleJornadaOtro(this.value)">
               <option value="">Seleccionar...</option>
               <option>Diurna (hasta 8h)</option><option>Nocturna (hasta 7h)</option>
               <option>Mixta (hasta 7.5h)</option><option>Turnos rotativos</option>
               <option>Reducida / Medio tiempo</option><option>Otro</option>
             </select>
+            <input id="ev-jornada-otro" type="text" placeholder="Especifica la duración y tipo de tu jornada (ej. 10h diarias, 4 días a la semana)"
+              style="display:none;margin-top:6px">
           </div>
           <div class="field"><label>Tipo de bipedestación</label>
-            <div class="radio-pills" style="margin-top:4px">
-              <label><input type="radio" name="bipe" value="Estática"> 🔒 Estática</label>
-              <label><input type="radio" name="bipe" value="Dinámica"> 🚶 Dinámica</label>
-              <label><input type="radio" name="bipe" value="Prolongada (+3h)"> ⏳ Prolongada (+3h)</label>
-              <label><input type="radio" name="bipe" value="Combinada"> 🔄 Combinada</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+              <label class="bipe-card">
+                <input type="radio" name="bipe" value="Estática">
+                <div class="bipe-content"><span class="bipe-icon">🔒</span><span class="bipe-label">Estática</span><span class="bipe-desc">Permaneces en un mismo punto sin desplazarte</span></div>
+              </label>
+              <label class="bipe-card">
+                <input type="radio" name="bipe" value="Dinámica">
+                <div class="bipe-content"><span class="bipe-icon">🚶</span><span class="bipe-label">Dinámica</span><span class="bipe-desc">Caminas o te desplazas frecuentemente</span></div>
+              </label>
+              <label class="bipe-card">
+                <input type="radio" name="bipe" value="Prolongada (+3h)">
+                <div class="bipe-content"><span class="bipe-icon">⏳</span><span class="bipe-label">Prolongada (+3h)</span><span class="bipe-desc">Más de 3 horas continuas de pie sin descanso</span></div>
+              </label>
+              <label class="bipe-card">
+                <input type="radio" name="bipe" value="Combinada">
+                <div class="bipe-content"><span class="bipe-icon">🔄</span><span class="bipe-label">Combinada</span><span class="bipe-desc">Mezcla de postura estática y dinámica</span></div>
+              </label>
             </div>
           </div>
         </div>
@@ -611,6 +635,13 @@ function gv(id){const el=document.getElementById(id);return el?el.value:'';}
 function sv2(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
 function sv3(id,val){const el=document.getElementById(id);if(el)el.value=val;}
 function ge(id){return document.getElementById(id);}
+function toggleJornadaOtro(val){
+  const el=document.getElementById('ev-jornada-otro');
+  if(!el)return;
+  el.style.display=(val==='Otro')?'block':'none';
+  if(val!=='Otro')el.value='';
+}
+
 function capitalizarNombre(str){
   if(!str)return str;
   return str.trim().split(' ').map(w=>w.length>0?w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():w).join(' ');
@@ -754,7 +785,7 @@ function saveEval(){
       db.evaluaciones[idx]={...db.evaluaciones[idx],puesto,
         trabajador:capitalizarNombre(document.getElementById('ev-trabajador').value),
         area:document.getElementById('ev-area').value,
-        jornada:document.getElementById('ev-jornada').value,
+        jornada:(document.getElementById('ev-jornada').value==='Otro'?(document.getElementById('ev-jornada-otro').value||'Otro'):document.getElementById('ev-jornada').value),
         bipedestacion:bipe?bipe.value:'',
         cumple,noCumple,pct,
         hallazgos:document.getElementById('ev-hallazgos').value,
@@ -776,15 +807,20 @@ function saveEval(){
   }
   const pct=Math.round((cumple.length/ITEMS.length)*100);
   const r={empresa,puesto,trabajador:document.getElementById('ev-trabajador').value,area:document.getElementById('ev-area').value,
-    jornada:document.getElementById('ev-jornada').value,bipedestacion:getBipedestacion(),cumple,noCumple,pct,
+    jornada:(document.getElementById('ev-jornada').value==='Otro'?(document.getElementById('ev-jornada-otro').value||'Otro'):document.getElementById('ev-jornada').value),bipedestacion:getBipedestacion(),cumple,noCumple,pct,
     hallazgos:document.getElementById('ev-hallazgos').value,correctivas:gv('ev-correctivas'),
     fecha:new Date().toLocaleDateString('es-MX'),id:Date.now()};
-  db.evaluaciones.push(r);persist();toast(`✅ Evaluación guardada — Cumplimiento: ${pct}%`);
+  db.evaluaciones.push(r);
+  persist();
+  sendToSheets('EVALUACION',r);
+  _evalGuardada=true;
+  renderEvalHistory();
+  toast(`✅ Evaluación guardada — Cumplimiento: ${pct}%`,'success');
 }
 function clearEval(){
   // Clear text fields
   ['ev-puesto','ev-trabajador','ev-area','ev-hallazgos','ev-correctivas'].forEach(id=>sv3(id,''));
-  sv3('ev-jornada','');
+  sv3('ev-jornada',''); sv3('ev-jornada-otro',''); const _oj=document.getElementById('ev-jornada-otro');if(_oj)_oj.style.display='none';
   // Clear radio buttons — bipedestacion
   document.querySelectorAll('input[name="bipe"]').forEach(r=>r.checked=false);
   // Clear all checklist radios
@@ -892,7 +928,16 @@ function editEval(id){
   sv3('ev-puesto', e.puesto||'');
   sv3('ev-trabajador', e.trabajador||'');
   sv3('ev-area', e.area||'');
-  sv3('ev-jornada', e.jornada||'');
+  const jornadaStd=['Diurna (hasta 8h)','Nocturna (hasta 7h)','Mixta (hasta 7.5h)','Turnos rotativos','Reducida / Medio tiempo'];
+  const jornadaVal=e.jornada||'';
+  if(jornadaStd.includes(jornadaVal)){
+    sv3('ev-jornada', jornadaVal);
+    const oj=document.getElementById('ev-jornada-otro');if(oj)oj.style.display='none';
+  } else if(jornadaVal){
+    sv3('ev-jornada','Otro');
+    sv3('ev-jornada-otro', jornadaVal);
+    const oj=document.getElementById('ev-jornada-otro');if(oj)oj.style.display='block';
+  }
   sv3('ev-hallazgos', e.hallazgos||'');
   sv3('ev-correctivas', e.correctivas||'');
   // Restore bipedestacion
