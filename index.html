@@ -217,15 +217,14 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
 .divider{border:none;border-top:1px solid var(--gray2);margin:18px 0}
 .section-label{font-size:11px;font-weight:700;color:var(--gray4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:18px;padding-bottom:6px;border-bottom:1px solid var(--gray2)}
 
-.bipe-card{display:flex;align-items:flex-start;gap:0;padding:10px 12px;border:1.5px solid var(--gray3);border-radius:var(--radius);cursor:pointer;transition:var(--transition);background:var(--white)}
+.bipe-card{display:flex;align-items:flex-start;gap:0;padding:14px;border:1.5px solid var(--gray3);border-radius:var(--radius);cursor:pointer;transition:var(--transition);background:var(--white);width:100%}
 .bipe-card:hover{border-color:var(--blue2);background:var(--sky2)}
 .bipe-card:has(input:checked){border-color:var(--blue2);background:var(--sky2)}
-.bipe-card input[type=radio]{margin-top:2px;accent-color:var(--blue2);flex-shrink:0}
-.bipe-content{display:flex;flex-direction:column;gap:2px;margin-left:8px}
-.bipe-icon{font-size:16px;line-height:1}
-.bipe-label{font-size:13px;font-weight:600;color:var(--navy)}
-.bipe-desc{font-size:11px;color:var(--gray4);line-height:1.3}
-@media(max-width:480px){.bipe-card{padding:8px 10px}}
+.bipe-card input[type=radio]{margin-top:3px;accent-color:var(--blue2);flex-shrink:0}
+.bipe-content{display:flex;flex-direction:column;gap:3px;margin-left:10px}
+.bipe-icon{font-size:18px;line-height:1}
+.bipe-label{font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px}
+.bipe-desc{font-size:12px;color:var(--gray5);line-height:1.4}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--navy);color:var(--white);padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:.35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:300px}
@@ -434,7 +433,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
               style="display:none;margin-top:6px">
           </div>
           <div class="field"><label>Tipo de bipedestación</label>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:8px">
               <label class="bipe-card">
                 <input type="radio" name="bipe" value="Estática">
                 <div class="bipe-content"><span class="bipe-icon">🔒</span><span class="bipe-label">Estática</span><span class="bipe-desc">Permaneces en un mismo punto sin desplazarte</span></div>
@@ -771,52 +770,74 @@ function clearEmpresa(){['e-razon','e-rfc','e-regpat','e-actividad','e-emp','e-c
 
 // ── EVALUACIÓN ──
 function saveEval(){
-  const puesto=document.getElementById('ev-puesto').value.trim();
+  const puestoEl=document.getElementById('ev-puesto');
+  if(!puestoEl){console.error('ev-puesto not found');return;}
+  const puesto=puestoEl.value.trim();
   if(!puesto){toast('El nombre del puesto es obligatorio','error');return;}
-  const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1].razon:'(Sin patrón registrado)';
+
+  const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1].razon:'Sin patron registrado';
   let cumple=[],noCumple=[];
-  ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="ci${i}"]:checked`);if(v){if(v.value==='si')cumple.push(i+1);else noCumple.push(i+1);}});
-  // If editing existing eval — UPDATE instead of create
+  ITEMS.forEach((_,i)=>{
+    const v=document.querySelector(`input[name="ci${i}"]:checked`);
+    if(v){if(v.value==='si')cumple.push(i+1);else noCumple.push(i+1);}
+  });
+  const pct=Math.round((cumple.length/ITEMS.length)*100);
+  const bipeEl=document.querySelector('input[name="bipe"]:checked');
+  const jornadaEl=document.getElementById('ev-jornada');
+  const jornadaOtroEl=document.getElementById('ev-jornada-otro');
+  const jornada=jornadaEl&&jornadaEl.value==='Otro'?(jornadaOtroEl?jornadaOtroEl.value:'Otro'):(jornadaEl?jornadaEl.value:'');
+
+  // MODE: editing existing
   if(_editingEvalId){
     const idx=db.evaluaciones.findIndex(e=>e.id===_editingEvalId);
     if(idx>=0){
-      const pct=Math.round((cumple.length/ITEMS.length)*100);
-      const bipe=document.querySelector('input[name="bipe"]:checked');
-      db.evaluaciones[idx]={...db.evaluaciones[idx],puesto,
-        trabajador:capitalizarNombre(document.getElementById('ev-trabajador').value),
-        area:document.getElementById('ev-area').value,
-        jornada:(document.getElementById('ev-jornada').value==='Otro'?(document.getElementById('ev-jornada-otro').value||'Otro'):document.getElementById('ev-jornada').value),
-        bipedestacion:bipe?bipe.value:'',
+      db.evaluaciones[idx]={
+        ...db.evaluaciones[idx],
+        puesto,
+        trabajador:capitalizarNombre(document.getElementById('ev-trabajador').value||''),
+        area:document.getElementById('ev-area').value||'',
+        jornada,
+        bipedestacion:bipeEl?bipeEl.value:'',
         cumple,noCumple,pct,
-        hallazgos:document.getElementById('ev-hallazgos').value,
+        hallazgos:document.getElementById('ev-hallazgos').value||'',
         correctivas:gv('ev-correctivas'),
-        fecha:new Date().toLocaleDateString('es-MX')};
+        fecha:new Date().toLocaleDateString('es-MX')
+      };
       persist();
       sendToSheets('EVALUACION',db.evaluaciones[idx]);
       _evalGuardada=true;
       _editingEvalId=null;
-      // Restore button
-      const btn=document.querySelector('button[onclick="saveEval()"]');
-      if(btn){btn.textContent='💾 Guardar evaluación';btn.style.background='';}
+      const editBtn=document.querySelector('button[onclick="saveEval()"]');
+      if(editBtn){editBtn.textContent='💾 Guardar evaluación';editBtn.style.background='';}
       const banner=document.getElementById('edit-mode-banner');
       if(banner)banner.style.display='none';
       renderEvalHistory();
-      toast(`✅ Evaluación actualizada — ${pct}%`,'success');
+      toast('✅ Evaluacion actualizada — '+pct+'%','success');
     }
     return;
   }
-  const pct=Math.round((cumple.length/ITEMS.length)*100);
-  const r={empresa,puesto,trabajador:document.getElementById('ev-trabajador').value,area:document.getElementById('ev-area').value,
-    jornada:(document.getElementById('ev-jornada').value==='Otro'?(document.getElementById('ev-jornada-otro').value||'Otro'):document.getElementById('ev-jornada').value),bipedestacion:getBipedestacion(),cumple,noCumple,pct,
-    hallazgos:document.getElementById('ev-hallazgos').value,correctivas:gv('ev-correctivas'),
-    fecha:new Date().toLocaleDateString('es-MX'),id:Date.now()};
+
+  // MODE: new evaluation
+  const r={
+    empresa,puesto,
+    trabajador:capitalizarNombre(document.getElementById('ev-trabajador').value||''),
+    area:document.getElementById('ev-area').value||'',
+    jornada,
+    bipedestacion:bipeEl?bipeEl.value:'',
+    cumple,noCumple,pct,
+    hallazgos:document.getElementById('ev-hallazgos').value||'',
+    correctivas:gv('ev-correctivas'),
+    fecha:new Date().toLocaleDateString('es-MX'),
+    id:Date.now()
+  };
   db.evaluaciones.push(r);
   persist();
   sendToSheets('EVALUACION',r);
   _evalGuardada=true;
   renderEvalHistory();
-  toast(`✅ Evaluación guardada — Cumplimiento: ${pct}%`,'success');
+  toast('✅ Evaluacion guardada — '+pct+'%','success');
 }
+
 function clearEval(){
   // Clear text fields
   ['ev-puesto','ev-trabajador','ev-area','ev-hallazgos','ev-correctivas'].forEach(id=>sv3(id,''));
