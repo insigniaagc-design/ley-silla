@@ -1187,13 +1187,13 @@ function generarYImprimir(){
   const css=[
     '*{box-sizing:border-box;margin:0;padding:0}',
     'body{font-family:Arial,sans-serif;font-size:11px;color:#1A1F2E;background:#fff}',
-    '.page{max-width:800px;margin:0 auto}',
+    
 
     /* ── MEMBRETE HEADER ── */
-    '.mbr{padding:10px 28px 8px;border-bottom:3px solid #0D2545;display:flex;align-items:center;justify-content:space-between;gap:16px}',
-    '.mbr-left{display:flex;align-items:center;gap:10px}',
-    '.mbr-logo{width:32px;height:32px;background:#fff;border-radius:6px;padding:1px;display:flex;align-items:center;justify-content:center;flex-shrink:0}',
-    '.mbr-logo img{width:30px;height:30px;object-fit:contain}',
+    '.mbr{padding:12px 28px 10px;border-bottom:2px solid #0D2545;display:flex;align-items:center;justify-content:space-between}',
+    
+    
+    
     '.mbr-img1{height:40px;object-fit:contain}',
     '.mbr-img2{height:18px;object-fit:contain}',
     '.mbr-right{text-align:right;font-size:8.5px;color:#5A6478;line-height:1.6}',
@@ -1256,21 +1256,19 @@ function generarYImprimir(){
     'ul.r li::before{content:"→";position:absolute;left:0;color:#2271C3;font-weight:700}',
 
     /* ── FOOTER MEMBRETE ── */
-    '.ftr{border-top:2px solid #0D2545;padding:8px 28px;display:flex;align-items:center;justify-content:space-between;margin-top:16px}',
-    '.ftr-img{height:16px;object-fit:contain;opacity:.7}',
-    '.ftr-right{text-align:right;font-size:7.5px;color:#9BA4B5;line-height:1.6}',
+    '.ftr{border-top:1.5px solid #0D2545;padding:8px 28px;text-align:center;margin-top:auto}',
+    '.ftr-center{font-size:8px;color:#9BA4B5;letter-spacing:.2px}',
+    
 
-    '@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{max-width:100%}}'
+    '@page{margin:0;size:letter}',
+    '@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;margin:0}.page{max-width:100%;min-height:100vh;display:flex;flex-direction:column}.body{flex:1}.ftr{position:fixed;bottom:0;left:0;right:0}}'
   ].join('');
 
   let h='<!DOCTYPE html><html lang="es-MX"><head><meta charset="UTF-8"><title>Diagnóstico Ley Silla — Insignia AGC</title><style>'+css+'</style></head><body><div class="page">';
 
   // ── MEMBRETE HEADER ──
   h+='<div class="mbr">';
-  h+='<div class="mbr-left">';
-  h+='<div class="mbr-logo"><img src="'+LOGO+'"></div>';
   h+='<img class="mbr-img1" src="'+MB1+'">';
-  h+='</div>';
   h+='<img class="mbr-img2" src="'+MB2+'">';
   h+='</div>';
 
@@ -1366,8 +1364,7 @@ function generarYImprimir(){
 
   // ── FOOTER MEMBRETE ──
   h+='<div class="ftr">';
-  h+='<img class="ftr-img" src="'+MB1+'">';
-  h+='<div class="ftr-right"><div>Diagnóstico Ley Silla México · Reforma LFT · DOF 19-dic-2024</div><div>www.insigniaagc.com · contacto@insigniaagc.com · WhatsApp: 663 429 0003</div></div>';
+  h+='<div class="ftr-center">Cobertura de Servicios: Tlax ● Pue ● BC ● Tel. 663.429.0003 ● insigniaagc.com ● contacto@insigniaagc.com</div>';
   h+='</div>';
 
   h+='</div></body></html>';
