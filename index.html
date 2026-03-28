@@ -1445,16 +1445,29 @@ function generarYImprimir(){
 
   h+='<div class="body-content">';
 
-  // RESUMEN
+  // RESUMEN — datos claros y útiles
+  // Puestos en incumplimiento (< 80%)
+  var evalsIncumplimiento = evals.filter(function(e){ return e.pct < 80; });
+  // Nivel de riesgo STPS predominante
+  var riesgoConteo = {Alto:0, Medio:0, Bajo:0};
+  evalsConRiesgo.forEach(function(e){ if(e.riesgoNivel && riesgoConteo[e.riesgoNivel]!==undefined) riesgoConteo[e.riesgoNivel]++; });
+  var riesgoPred = 'Sin datos';
+  var riesgoPredColor = '#9BA4B5';
+  if(evalsConRiesgo.length > 0){
+    if(riesgoConteo.Alto >= riesgoConteo.Medio && riesgoConteo.Alto >= riesgoConteo.Bajo){ riesgoPred='Alto'; riesgoPredColor='#C0392B'; }
+    else if(riesgoConteo.Medio >= riesgoConteo.Alto && riesgoConteo.Medio >= riesgoConteo.Bajo){ riesgoPred='Medio'; riesgoPredColor='#C9882A'; }
+    else { riesgoPred='Bajo'; riesgoPredColor='#1A7A4A'; }
+  }
+
   h+='<div class="st">Resumen Ejecutivo</div>';
   h+='<div class="sbox"><div class="sm" style="background:'+nivelColor+'18">';
-  h+='<div class="slb">Cumplimiento</div>';
+  h+='<div class="slb">Cumplimiento promedio</div>';
   h+='<div class="sp" style="color:'+nivelColor+'">'+avgPct+'%</div>';
   h+='<div class="sl" style="color:'+nivelColor+'">Nivel '+nivelLabel+'</div></div>';
   h+='<div class="ss">';
   h+='<div class="sst"><div class="sn">'+evals.length+'</div><div class="ssb">Colaboradores evaluados</div></div>';
-  h+='<div class="sst"><div class="sn">'+evalsConRiesgo.length+'</div><div class="ssb">Con nivel de riesgo</div></div>';
-  h+='<div class="sst"><div class="sn">'+db.empresas.length+'</div><div class="ssb">Patrones registrados</div></div>';
+  h+='<div class="sst"><div class="sn" style="color:'+(evalsIncumplimiento.length>0?'#C0392B':'#1A7A4A')+'">'+evalsIncumplimiento.length+'</div><div class="ssb">Puestos con<br>incumplimiento</div><div style="font-size:7px;color:#9BA4B5;margin-top:1px">Cumplimiento menor al 80%</div></div>';
+  h+='<div class="sst"><div class="sn" style="color:'+riesgoPredColor+'">'+riesgoPred+'</div><div class="ssb">Nivel de riesgo<br>ergonomico</div><div style="font-size:7px;color:#9BA4B5;margin-top:1px">7 condicionantes STPS</div></div>';
   h+='</div></div>';
 
   // PATRON
