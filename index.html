@@ -1485,12 +1485,17 @@ function generarYImprimir(){
   css+='.ftr{border-top:1.5px solid #0D2545;padding:8px 28px;text-align:center}';
   css+='.ftr-txt{font-size:8px;color:#9BA4B5;letter-spacing:.2px}';
 
-  // Print rules — suppress browser header/footer, keep colors
-  css+='@page{margin:0;size:letter}';
+  // Print rules — membrete fijo en todas las hojas
+  // Medidas: @page con márgenes que dejan espacio para header y footer fijos
+  css+='@page{margin:62px 0 36px 0;size:letter}';
   css+='@media print{';
-  css+='  html,body{margin:0;padding:0;height:100%}';
-  css+='  .wrap{min-height:100vh}';
-  css+='  .ftr{position:fixed;bottom:0;left:0;right:0;background:#fff}';
+  css+='  html,body{margin:0;padding:0}';
+  css+='  .wrap{width:100%}';
+  // Membrete fijo arriba en todas las hojas
+  css+='  .mbr{position:fixed;top:0;left:0;right:0;z-index:9999;background:#fff;border-bottom:2px solid #0D2545;padding:8px 28px 7px;display:flex;align-items:center;justify-content:space-between}';
+  // Footer fijo abajo en todas las hojas
+  css+='  .ftr{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1.5px solid #0D2545;padding:5px 28px;text-align:center}';
+  css+='  .body-content{padding:12px 28px}';
   css+='  -webkit-print-color-adjust:exact;print-color-adjust:exact';
   css+='}';
 
