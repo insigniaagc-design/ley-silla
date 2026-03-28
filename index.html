@@ -1645,7 +1645,7 @@ function generarYImprimir(){
       norma: 'NOM-030-STPS-2009'
     },
     {
-      texto: 'Actualizar el Reglamento Interior de Trabajo para incluir expresamente el derecho a usar sillas. El plazo normativo vencio el 14-dic-2025 — este punto requiere atencion inmediata.',
+      texto: 'Actualizar el Reglamento Interior de Trabajo para incluir expresamente el derecho a usar sillas. El plazo normativo vencio el 14-dic-2025.',
       items: [10],
       norma: 'Art. 422-423 LFT'
     },
@@ -1698,9 +1698,9 @@ function generarYImprimir(){
   }
 
   function nivelTexto(pct) {
-    if (pct >= 80) return { label: 'Implementado', color: '#1A7A4A', bg: '#E4F5EC' };
-    if (pct >= 40) return { label: 'En proceso', color: '#C9882A', bg: '#FEF3DC' };
-    return { label: 'Requiere accion', color: '#C0392B', bg: '#FDECEB' };
+    if (pct >= 80) return { label: 'En cumplimiento', sublabel: '80% o más de los puestos evaluados', color: '#1A7A4A', bg: '#E4F5EC' };
+    if (pct >= 40) return { label: 'Oportunidad de mejora', sublabel: 'Entre 40% y 79% de los puestos evaluados', color: '#C9882A', bg: '#FEF3DC' };
+    return { label: 'Atención inmediata', sublabel: 'Menos del 40% de los puestos evaluados', color: '#C0392B', bg: '#FDECEB' };
   }
 
   var recsConPct = RECS_DEF.map(function(r) {
@@ -1720,7 +1720,10 @@ function generarYImprimir(){
     h += '<div style="font-size:9.5px;color:#1A1F2E;line-height:1.5;margin-bottom:3px">' + r.texto + '</div>';
     h += '<div style="font-size:7.5px;color:#9BA4B5">Ref. normativa: ' + r.norma + '</div>';
     h += '</div>';
-    h += '<span style="flex-shrink:0;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;background:' + n.bg + ';color:' + n.color + '">' + n.label + '</span>';
+    h += '<div style="flex-shrink:0;text-align:right">';
+    h += '<span style="font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;background:' + n.bg + ';color:' + n.color + '">' + n.label + '</span>';
+    h += '<div style="font-size:7px;color:#9BA4B5;margin-top:2px">' + n.sublabel + '</div>';
+    h += '</div>';
     h += '</div>';
     h += '<div style="margin-top:4px">';
     h += semaforoSVG(r.pct);
