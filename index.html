@@ -530,7 +530,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
         </div>
         <div class="alert alert-info">
           <span class="alert-icon">📄</span>
-          <span>El reporte incluye todos los datos del patrón, evaluaciones de puesto, nivel de riesgo, actas de recorrido y bitácora de pausas. Puedes imprimirlo o guardarlo como PDF.</span>
+          <span>El reporte incluye los datos del patrón, evaluaciones de puesto y nivel de riesgo por colaborador. Puedes imprimirlo o guardarlo como PDF desde la ventana de impresión.</span>
         </div>
         <div class="form-grid">
           <div class="field form-full">
@@ -655,7 +655,7 @@ function toast(msg,type='success'){
 }
 
 // ── NAV ──
-const TITLES={inicio:['Panel de control','Resumen general'],empresa:['Registro del patrón','Datos del centro de trabajo'],evaluacion:['Evaluar colaborador','Checklist Ley Silla + Nivel de riesgo STPS por persona trabajadora'],riesgo:['Nivel de riesgo por bipedestación','7 condicionantes STPS · Disposición Quinta'],recorrido:['Acta de recorrido de verificación','Comisión de Seguridad e Higiene · Apdo. B y C STPS'],pausas:['Pausas activas','Bitácora de descansos'],base:['Base de datos','Registros almacenados'],reporte:['Generar reporte','Informe para STPS / cliente']};
+const TITLES={inicio:['Panel de control','Resumen general'],empresa:['Registro del patrón','Datos del centro de trabajo'],evaluacion:['Evaluar colaborador','Checklist Ley Silla + Nivel de riesgo STPS por persona trabajadora'],riesgo:['Nivel de riesgo por bipedestación','7 condicionantes STPS · Disposición Quinta'],recorrido:['Acta de recorrido de verificación','Comisión de Seguridad e Higiene · Apdo. B y C STPS'],pausas:['Pausas activas','Bitácora de descansos'],base:['Base de datos','Registros almacenados'],reporte:['Imprimir reporte','Informe de cumplimiento Ley Silla']};
 function showPanel(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
