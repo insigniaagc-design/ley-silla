@@ -610,10 +610,10 @@ function ge(id){return document.getElementById(id);}
 const SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyDFuZFIbIG3-RXFKtga7_1qinvGgviwlFn37UD_6c17KIuMGAvBLUhWSUjrT2_RDmu/exec';
 
 let db = {empresas:[], evaluaciones:[], riesgos:[], recorridos:[], pausas:[], tipoPerson:'moral'};
-try{const s=localStorage.getItem('leysilla_mx_v1');if(s)db=JSON.parse(s);}catch(e){}
+try{localStorage.removeItem('leysilla_mx_v1');}catch(e){}
 
 function persist(){
-  try{localStorage.setItem('leysilla_mx_v1',JSON.stringify(db));}catch(e){}
+  // Sin localStorage — datos solo van a Google Sheets
   updateKPIs();
   const t=db.evaluaciones.length+db.riesgos.length;
   sv2('nb-total',t>0?t:'0');
@@ -993,12 +993,21 @@ function buildReportText(evaluador){
 function generarYImprimir(){
   const evaluador=document.getElementById('rev').value||'';
   const txt=buildReportText(evaluador);
+  // Send report copy to Insignia AGC Sheets
+  sendToSheets('REPORTE',{
+    evaluador,
+    fecha:new Date().toLocaleDateString('es-MX'),
+    patron:db.empresas.length>0?db.empresas[db.empresas.length-1].razon:'N/A',
+    rfc:db.empresas.length>0?db.empresas[db.empresas.length-1].rfc:'N/A',
+    evaluaciones:db.evaluaciones.length,
+    riesgos:db.riesgos.length,
+    cumplimiento_promedio:db.evaluaciones.length?Math.round(db.evaluaciones.reduce((a,e)=>a+e.pct,0)/db.evaluaciones.length):0,
+    reporte_completo:txt.substring(0,4000) // first 4000 chars to fit URL limit
+  });
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Reporte Ley Silla — Insignia AGC</title>
-  <style>
-    body{font-family:'Courier New',monospace;font-size:12px;padding:28px;white-space:pre-wrap;line-height:1.7;color:#1a1f2e}
-    @media print{body{padding:0}}
-  </style></head><body>${txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</body></html>`);
+  <style>body{font-family:'Courier New',monospace;font-size:12px;padding:28px;white-space:pre-wrap;line-height:1.7;color:#1a1f2e}@media print{body{padding:0}}</style>
+  </head><body>${txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</body></html>`);
   w.document.close();
   setTimeout(()=>w.print(),400);
   toast('✅ Reporte listo — se abrió la ventana de impresión','success');
@@ -1034,29 +1043,39 @@ function download(content,name,type){
 }
 
 // ── GOOGLE SHEETS INTEGRATION ──
-async function sendToSheets(tipo, datos){
+function sendToSheets(tipo, datos){
   if(!SHEETS_WEBHOOK)return;
   try{
-    const patron=db.empresas.length>0?{razon:db.empresas[db.empresas.length-1].razon,rfc:db.empresas[db.empresas.length-1].rfc,municipio:db.empresas[db.empresas.length-1].municipio,estado:db.empresas[db.empresas.length-1].estado}:null;
+    const patron=db.empresas.length>0?{
+      razon:db.empresas[db.empresas.length-1].razon,
+      rfc:db.empresas[db.empresas.length-1].rfc,
+      municipio:db.empresas[db.empresas.length-1].municipio,
+      estado:db.empresas[db.empresas.length-1].estado
+    }:null;
     const payload={tipo,timestamp:new Date().toISOString(),patron,datos};
-    await fetch(SHEETS_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  }catch(e){console.warn('Sheets send error:',e.message);}
+    const json=JSON.stringify(payload);
+    // Method 1: fetch no-cors (works in most cases)
+    fetch(SHEETS_WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:json}).catch(()=>{});
+    // Method 2: fallback via GET with encoded data (works when POST is blocked)
+    const encoded=encodeURIComponent(json);
+    if(encoded.length < 7000){
+      const img=new Image();
+      img.src=SHEETS_WEBHOOK+'?data='+encoded+'&t='+Date.now();
+    }
+  }catch(e){console.warn('Sheets:',e.message);}
 }
-async function testSheets(){
-  if(!SHEETS_WEBHOOK){toast('Webhook no configurado en el código fuente','error');return;}
-  toast('Enviando prueba a Google Sheets...','success');
-  await sendToSheets('TEST',{mensaje:'Prueba de conexión desde Ley Silla — Insignia AGC',fecha:new Date().toLocaleDateString('es-MX')});
-  setTimeout(()=>toast('✅ Datos enviados. Revisa tu Google Sheet para confirmar.','success'),800);
+function testSheets(){
+  if(!SHEETS_WEBHOOK){toast('Webhook no configurado','error');return;}
+  toast('Enviando prueba...','success');
+  sendToSheets('TEST',{mensaje:'Prueba de conexion - Insignia AGC',fecha:new Date().toLocaleDateString('es-MX')});
+  setTimeout(()=>toast('Prueba enviada. Revisa tu Sheet en 10 segundos.','success'),1000);
 }
-async function syncAllToSheets(){
-  if(!SHEETS_WEBHOOK){toast('Webhook no configurado en el código fuente','error');return;}
-  toast('Sincronizando todos los datos...','success');
-  for(const e of db.empresas)await sendToSheets('PATRON',e);
-  for(const e of db.evaluaciones)await sendToSheets('EVALUACION',e);
-  for(const r of db.riesgos)await sendToSheets('RIESGO',r);
-  for(const r of db.recorridos)await sendToSheets('ACTA',r);
-  for(const p of db.pausas)await sendToSheets('PAUSA',p);
-  toast(`✅ Sincronizados: ${db.empresas.length} patrones, ${db.evaluaciones.length} evaluaciones, ${db.riesgos.length} riesgos, ${db.recorridos.length} actas, ${db.pausas.length} pausas`,'success');
+function syncAllToSheets(){
+  if(!SHEETS_WEBHOOK){toast('Webhook no configurado','error');return;}
+  db.empresas.forEach(e=>sendToSheets('PATRON',e));
+  db.evaluaciones.forEach(e=>sendToSheets('EVALUACION',e));
+  db.riesgos.forEach(r=>sendToSheets('RIESGO',r));
+  toast('Datos enviados a Google Sheets','success');
 }
 function updateSheetsBanner(){
   const el=document.getElementById('sheets-status-banner');if(!el)return;
