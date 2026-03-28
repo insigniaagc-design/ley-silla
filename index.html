@@ -1349,24 +1349,113 @@ function generarYImprimir(){
   ].forEach(function(n){h+='<li>'+n+'</li>';});
   h+='</ul>';
 
-  // RECOMENDACIONES
-  var recs=avgPct<80?[
-    'Proveer sillas ergonomicas con respaldo en todos los puestos en bipedestacion.',
-    'El plazo para actualizar el Reglamento Interior de Trabajo conforme a la Ley Silla vencio el 14 de diciembre de 2025. Este incumplimiento debe atenderse de manera urgente.',
-    'Establecer un programa formal de pausas activas con horarios definidos y documentados.',
-    'Realizar la evaluacion formal del nivel de riesgo con las 7 condicionantes STPS (Disposicion Quinta, DOF 17-jul-2025).',
-    'Habilitar y senalizar areas especificas de descanso sentado.',
-    'Levantar actas de recorrido con la Comision de Seguridad e Higiene para inspecciones STPS 2026.',
-    'Instalar tapetes antifatiga en puestos con piso de concreto o ceramica.'
-  ]:[
-    'Mantener los controles implementados e integrarlos al programa SST anual.',
-    'Verificar que el Reglamento Interior de Trabajo este actualizado — el plazo vencio el 14-dic-2025.',
-    'Continuar el registro sistematico de pausas activas como evidencia documental.',
-    'Preparar documentacion para inspecciones STPS programadas en 2026.'
+  // RECOMENDACIONES DINAMICAS CON SEMAFORO
+  var RECS_DEF = [
+    {
+      texto: 'Proveer sillas ergonomicas con respaldo en todos los puestos en bipedestacion, garantizando que el mobiliario este en buen estado y sea accesible durante la jornada.',
+      items: [0, 1, 2, 9],
+      norma: 'Art. 132 LFT'
+    },
+    {
+      texto: 'Garantizar que todos los colaboradores tengan la posibilidad de sentarse en algun momento de su turno, y que no existan practicas o instrucciones que lo prohiban.',
+      items: [3, 4, 5],
+      norma: 'Art. 133 LFT'
+    },
+    {
+      texto: 'Establecer un programa formal de pausas activas con horarios definidos, documentados y de duracion suficiente para la recuperacion del colaborador.',
+      items: [6, 7],
+      norma: 'DOF 17-jul-2025'
+    },
+    {
+      texto: 'Implementar dinamicas de alternancia postural (de pie / sentado) a lo largo de la jornada para reducir el riesgo ergonomico asociado a la bipedestacion prolongada.',
+      items: [8],
+      norma: 'NOM-030-STPS-2009'
+    },
+    {
+      texto: 'Actualizar el Reglamento Interior de Trabajo para incluir expresamente el derecho a usar sillas. El plazo normativo vencio el 14-dic-2025 — este punto requiere atencion inmediata.',
+      items: [10],
+      norma: 'Art. 422-423 LFT'
+    },
+    {
+      texto: 'Implementar un programa de informacion y capacitacion sobre los riesgos de la bipedestacion prolongada y habitos posturales saludables.',
+      items: [11, 13],
+      norma: 'NOM-030-STPS-2009'
+    },
+    {
+      texto: 'Habilitar, senalizar y mantener visibles las areas especificas de descanso sentado en cada zona de trabajo.',
+      items: [12],
+      norma: 'DOF 17-jul-2025 · STPS'
+    },
+    {
+      texto: 'Establecer un protocolo de atencion y seguimiento medico para colaboradores que presenten molestias derivadas de la bipedestacion, y documentar los casos.',
+      items: [14],
+      norma: 'NOM-030-STPS-2009'
+    },
+    {
+      texto: 'Asegurarse de que la Comision de Seguridad e Higiene realice recorridos periodicos, levante actas y que estas esten disponibles como evidencia documental ante inspecciones STPS 2026.',
+      items: [15],
+      norma: 'NOM-019-STPS-2011'
+    }
   ];
-  h+='<div class="st">4. Recomendaciones</div><ul class="r">';
-  recs.forEach(function(r){h+='<li>'+r+'</li>';});
-  h+='</ul>';
+
+  function calcRecPct(itemIdxs) {
+    if (!evals.length) return 0;
+    var total = 0;
+    itemIdxs.forEach(function(idx) {
+      var cumpleCount = evals.filter(function(e) {
+        return (e.cumple || []).indexOf(idx) !== -1;
+      }).length;
+      total += cumpleCount / evals.length;
+    });
+    return Math.round((total / itemIdxs.length) * 100);
+  }
+
+  function semaforoSVG(pct) {
+    var uid = 'sg' + pct + Math.floor(Math.random()*9999);
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="18" viewBox="0 0 200 18" style="display:block;margin-top:5px">'
+      + '<defs><linearGradient id="' + uid + '" x1="0%" y1="0%" x2="100%" y2="0%">'
+      + '<stop offset="0%" style="stop-color:#C0392B"/>'
+      + '<stop offset="50%" style="stop-color:#C9882A"/>'
+      + '<stop offset="100%" style="stop-color:#1A7A4A"/>'
+      + '</linearGradient></defs>'
+      + '<rect x="0" y="5" width="200" height="8" rx="4" fill="url(#' + uid + ')" opacity="0.22"/>'
+      + '<rect x="0" y="5" width="' + (pct * 2) + '" height="8" rx="4" fill="url(#' + uid + ')"/>'
+      + '<circle cx="' + (pct * 2) + '" cy="9" r="5" fill="white" stroke="#555" stroke-width="1.2"/>'
+      + '</svg>';
+  }
+
+  function nivelTexto(pct) {
+    if (pct >= 80) return { label: 'Implementado', color: '#1A7A4A', bg: '#E4F5EC' };
+    if (pct >= 40) return { label: 'En proceso', color: '#C9882A', bg: '#FEF3DC' };
+    return { label: 'Requiere accion', color: '#C0392B', bg: '#FDECEB' };
+  }
+
+  var recsConPct = RECS_DEF.map(function(r) {
+    return { texto: r.texto, norma: r.norma, pct: calcRecPct(r.items) };
+  });
+  recsConPct.sort(function(a, b) { return a.pct - b.pct; });
+
+  h += '<div class="st">4. Recomendaciones y Estado de Implementacion</div>';
+  h += '<div style="font-size:8.5px;color:#5A6478;margin-bottom:10px">Cada indicador refleja el nivel de implementacion del control evaluado en el conjunto de colaboradores del centro de trabajo. Las recomendaciones se presentan en orden de prioridad.</div>';
+  h += '<div style="display:flex;flex-direction:column;gap:8px">';
+  recsConPct.forEach(function(r) {
+    var n = nivelTexto(r.pct);
+    var puestosLbl = evals.length > 0 ? r.pct + '% de los puestos evaluados tienen este control implementado' : 'Sin evaluaciones registradas';
+    h += '<div style="border:1px solid #D5D9E2;border-radius:7px;padding:9px 13px;border-left:4px solid ' + n.color + '">';
+    h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">';
+    h += '<div style="flex:1">';
+    h += '<div style="font-size:9.5px;color:#1A1F2E;line-height:1.5;margin-bottom:3px">' + r.texto + '</div>';
+    h += '<div style="font-size:7.5px;color:#9BA4B5">Ref. normativa: ' + r.norma + '</div>';
+    h += '</div>';
+    h += '<span style="flex-shrink:0;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;background:' + n.bg + ';color:' + n.color + '">' + n.label + '</span>';
+    h += '</div>';
+    h += '<div style="margin-top:4px">';
+    h += semaforoSVG(r.pct);
+    h += '<div style="font-size:7.5px;color:#9BA4B5;margin-top:2px">' + puestosLbl + '</div>';
+    h += '</div>';
+    h += '</div>';
+  });
+  h += '</div>';
 
   h+='</div>'; // end body-content
 
