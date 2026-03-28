@@ -307,26 +307,64 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
     <div id="panel-inicio" class="panel active">
       <div class="hero">
         <div class="hero-title">Sistema Ley Silla — México</div>
-        <div class="hero-sub">Gestión integral de riesgos ergonómicos por bipedestación. Conforme a la Reforma LFT (DOF 19-dic-2024) y Disposiciones STPS del 17-jul-2025. Inspecciones STPS activas desde 2026.</div>
+        <div class="hero-sub">Diagnóstico de autoevaluación de riesgos ergonómicos por bipedestación. Conforme a la Reforma LFT (DOF 19-dic-2024) y Disposiciones STPS (DOF 17-jul-2025).</div>
         <div class="hero-steps">
           <div class="hero-step"><div class="hero-step-num">1</div><div class="hero-step-title">Datos del patrón</div><div class="hero-step-desc">RFC, Registro Patronal, domicilio del centro de trabajo</div></div>
           <div class="hero-step"><div class="hero-step-num">2</div><div class="hero-step-title">Evaluar puestos</div><div class="hero-step-desc">Un registro por cada colaborador en bipedestación</div></div>
           <div class="hero-step"><div class="hero-step-num">3</div><div class="hero-step-title">Nivel de riesgo</div><div class="hero-step-desc">7 condicionantes STPS por colaborador</div></div>
-          <div class="hero-step"><div class="hero-step-num">4</div><div class="hero-step-title">Tu reporte</div><div class="hero-step-desc">Imprime o descarga tu informe de cumplimiento</div></div>
+          <div class="hero-step"><div class="hero-step-num">4</div><div class="hero-step-title">Tu reporte</div><div class="hero-step-desc">Visualiza tu diagnóstico informativo</div></div>
         </div>
       </div>
-      <div class="norm-banner">⚖️ <span>Este diagnóstico es <strong>confidencial</strong>. La información que proporcionas ayuda a Insignia AGC a identificar las condiciones ergonómicas de tu centro de trabajo y generar recomendaciones de cumplimiento de la Ley Silla (Reforma LFT, DOF 19-dic-2024).</span></div>
-      <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-label">Patrones</div><div class="kpi-val" id="k-emp">0</div><div class="kpi-sub">registrados</div></div>
-        <div class="kpi-card"><div class="kpi-label">Evaluaciones</div><div class="kpi-val" id="k-eva">0</div><div class="kpi-sub">de puesto</div></div>
-        
-        
-        <div class="kpi-card"><div class="kpi-label">Cumplimiento</div><div class="kpi-val" id="k-cum">—</div><div class="kpi-sub">promedio general</div></div>
+
+      <!-- ALERTA STPS -->
+      <div style="background:linear-gradient(135deg,#7B1010,#C0392B);border-radius:var(--radius-lg);padding:18px 22px;margin-bottom:18px;display:flex;align-items:flex-start;gap:16px;box-shadow:0 4px 18px rgba(192,57,43,.25)">
+        <div style="font-size:28px;flex-shrink:0;margin-top:2px">🚨</div>
+        <div style="flex:1">
+          <div style="color:#fff;font-weight:700;font-size:15px;margin-bottom:4px">Alerta de Inspección STPS 2025–2026</div>
+          <div style="color:rgba(255,255,255,.88);font-size:13px;line-height:1.6">La STPS tiene programadas <strong style="color:#FFD700">más de 43,000 inspecciones</strong> para el periodo 2025–2026, con énfasis en empresas del sector <strong style="color:#FFD700">comercio, servicios e industria</strong>. La Ley Silla (vigente desde el 15-dic-2025) es uno de los ejes prioritarios de verificación. Una inspección sin preparación puede derivar en multas, actas de infracción y requerimientos de corrección inmediata.</div>
+          <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+            <span style="background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px">⚠️ Inspecciones extraordinarias sin previo aviso</span>
+            <span style="background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px">📋 Reglamento Interior de Trabajo: debía actualizarse para incluir el derecho a sillas — plazo vencido desde el 14-dic-2025 · ¿Ya lo actualizaste?</span>
+            <span style="background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px">🏭 Sector comercio y servicios: prioridad STPS</span>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-header"><div class="card-icon ci-blue">📊</div><div><div class="card-title">Últimas evaluaciones</div><div class="card-desc">Puestos evaluados recientemente</div></div></div>
-        <div id="recent-evals"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin evaluaciones aún</div><div class="empty-desc">Ve a "Evaluar puesto" para comenzar</div></div></div>
+
+      <!-- RIESGO DE MULTA -->
+      <div id="multa-panel" style="background:var(--white);border:1px solid var(--gray3);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:18px;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <div style="font-size:22px">⚖️</div>
+          <div>
+            <div style="font-weight:700;color:var(--navy);font-size:14px">Estimador de Exposición Legal</div>
+            <div style="font-size:12px;color:var(--gray4)">Basado en rangos mínimos de la LFT · UMA 2026: $117.31 MXN diarios (DOF, vigente 1-feb-2026)</div>
+          </div>
+        </div>
+        <div id="multa-content">
+          <div style="background:var(--gray1);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--gray5);text-align:center">
+            Completa el registro del patrón y al menos una evaluación de colaborador para calcular tu exposición legal estimada.
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:10.5px;color:var(--gray4);line-height:1.5;border-top:1px solid var(--gray2);padding-top:10px">
+          <strong>Nota metodológica:</strong> Estimación basada en los rangos mínimos establecidos en la LFT (50 UMAs por infracción) y la UMA diaria 2026 ($117.31). El monto real dependerá del criterio del inspector STPS, número de infracciones acumuladas, reincidencia y antecedentes del centro de trabajo. Este cálculo es estrictamente referencial e informativo — no constituye una determinación oficial de sanción.
+        </div>
+        <div style="margin-top:14px;text-align:center">
+          <a href="https://wa.me/526634290003?text=Hola%2C%20quiero%20conocer%20c%C3%B3mo%20reducir%20mi%20riesgo%20de%20multa%20Ley%20Silla" target="_blank" style="display:inline-block;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;font-weight:700;font-size:13px;padding:10px 22px;border-radius:8px;text-decoration:none;box-shadow:0 3px 10px rgba(26,86,160,.3)">💬 Habla con un especialista Insignia AGC</a>
+        </div>
       </div>
+
+      <!-- RESULTADOS POR ÁREA -->
+      <div id="areas-panel" style="display:none;background:var(--white);border:1px solid var(--gray3);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:18px;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <div style="font-size:20px">🗂️</div>
+          <div style="font-weight:700;color:var(--navy);font-size:14px">Cumplimiento por Área de Trabajo</div>
+        </div>
+        <div style="font-size:11.5px;color:var(--gray4);margin-bottom:14px;padding:8px 12px;background:var(--sky2);border-radius:var(--radius);border-left:3px solid var(--sky)">
+          💡 El agrupamiento por área corresponde al campo "Área" registrado en cada evaluación. Para mayor precisión en este análisis, asegúrese de capturar el área de forma consistente en todos los colaboradores.
+        </div>
+        <div id="areas-content"></div>
+      </div>
+
+      <div class="norm-banner">⚖️ <span>Este diagnóstico es <strong>informativo y referencial</strong>. La información proporcionada ayuda a Insignia AGC a identificar las condiciones ergonómicas de tu centro de trabajo. No constituye un dictamen técnico ni certificación de cumplimiento normativo.</span></div>
     </div>
 
     <!-- ══ EMPRESA ══ -->
@@ -666,7 +704,7 @@ function showPanel(id,el){
   document.getElementById('page-subtitle').textContent=t[1];
   if(id==='base')renderDB();
   if(id==='reporte')populateSelect();
-  if(id==='inicio')renderRecent();
+  if(id==='inicio'){renderMulta();renderAreas();}
   if(id==='evaluacion'){renderEvalHistory();showPatronBanners();}
 
   closeSidebar();
@@ -837,6 +875,7 @@ function saveEval(){
   _evalGuardada=true;
   renderEvalHistory();
   toast('✅ Guardado — '+pct+'% cumplimiento · Riesgo '+riesgoNivel,'success');
+  updateKPIs();
 }
 
 function clearEval(){
@@ -930,12 +969,132 @@ function deleteEval(id){if(confirm('¿Eliminar?')){db.evaluaciones=db.evaluacion
 function deleteRiesgo(id){if(confirm('¿Eliminar?')){db.riesgos=db.riesgos.filter(r=>r.id!==id);persist();renderDB();toast('Evaluación eliminada');}}
 function clearAll(){db={empresas:[],evaluaciones:[],riesgos:[],recorridos:[],pausas:[],tipoPerson:'moral'};persist();renderDB();renderPausas();renderRecorridos();toast('Base de datos borrada');}
 
-// ── KPIs ──
+// ── KPIs / DASHBOARD INICIO ──
+const UMA_2026 = 117.31;
+const UMA_MIN_FACTOR = 50; // mínimo legal LFT: 50 UMAs por infracción
+
+// Infracciones mapeadas por grupo de ítems (índices 0-based de ITEMS)
+const INFRAC_MAP = [
+  { norma: 'Art. 132 LFT — Sin sillas con respaldo', items: [0,1,2,9] },
+  { norma: 'Art. 133 LFT — Restricción a sentarse', items: [3,4,5] },
+  { norma: 'Art. 422-423 LFT — Reglamento Interior desactualizado', items: [10] },
+  { norma: 'NOM-030-STPS — Sin programa de pausas/capacitación', items: [6,7,13] },
+  { norma: 'DOF 17-jul-2025 — Sin áreas/señalización de descanso', items: [8,12] },
+  { norma: 'NOM-019-STPS — Sin Comisión de Seguridad e Higiene activa', items: [15] },
+];
+
+function calcMulta() {
+  if (!db.evaluaciones.length) return null;
+  const nColab = db.evaluaciones.length;
+  let totalMulta = 0;
+  let detalles = [];
+  INFRAC_MAP.forEach(function(inf) {
+    // Promedio de incumplimiento en los ítems de esta infracción
+    let incumpleCount = 0;
+    let total = 0;
+    inf.items.forEach(function(idx) {
+      db.evaluaciones.forEach(function(e) {
+        total++;
+        if ((e.noCumple || []).indexOf(idx) !== -1) incumpleCount++;
+      });
+    });
+    const pctIncumple = total > 0 ? incumpleCount / total : 0;
+    const colaborAfectados = Math.round(pctIncumple * nColab);
+    if (colaborAfectados > 0) {
+      const monto = UMA_MIN_FACTOR * UMA_2026 * colaborAfectados;
+      totalMulta += monto;
+      detalles.push({ norma: inf.norma, afectados: colaborAfectados, monto: monto });
+    }
+  });
+  return { total: totalMulta, detalles: detalles, nColab: nColab };
+}
+
+function renderMulta() {
+  const el = document.getElementById('multa-content');
+  if (!el) return;
+  const r = calcMulta();
+  if (!r) {
+    el.innerHTML = '<div style="background:var(--gray1);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--gray5);text-align:center">Completa el registro del patrón y al menos una evaluación de colaborador para calcular tu exposición legal estimada.</div>';
+    return;
+  }
+  if (r.total === 0) {
+    el.innerHTML = '<div style="background:var(--green2);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--green);font-weight:600;text-align:center">✅ Con base en las evaluaciones registradas, no se detectaron incumplimientos que generen exposición estimada. Mantén los controles documentados como evidencia ante inspección STPS.</div>';
+    return;
+  }
+  const fmt = n => n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
+  const nivelColor = r.total > 200000 ? '#C0392B' : r.total > 80000 ? '#C9882A' : '#1A7A4A';
+  const nivelLabel = r.total > 200000 ? 'EXPOSICIÓN ALTA' : r.total > 80000 ? 'EXPOSICIÓN MODERADA' : 'EXPOSICIÓN BAJA';
+  let html = '';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap">';
+  html += '<div>';
+  html += '<div style="font-size:11px;font-weight:700;color:' + nivelColor + ';letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px">' + nivelLabel + '</div>';
+  html += '<div style="font-size:32px;font-weight:700;color:' + nivelColor + ';line-height:1">' + fmt(r.total) + '</div>';
+  html += '<div style="font-size:11.5px;color:var(--gray4);margin-top:3px">Exposición legal mínima estimada · ' + r.nColab + ' colaborador' + (r.nColab !== 1 ? 'es' : '') + ' evaluado' + (r.nColab !== 1 ? 's' : '') + '</div>';
+  html += '</div>';
+  html += '<div style="text-align:right"><div style="font-size:10px;color:var(--gray4)">Por infracción detectada</div><div style="font-size:22px;font-weight:700;color:var(--navy)">' + r.detalles.length + '</div><div style="font-size:10px;color:var(--gray4)">tipo' + (r.detalles.length !== 1 ? 's' : '') + ' de incumplimiento</div></div>';
+  html += '</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:6px">';
+  r.detalles.forEach(function(d) {
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--gray1);border-radius:var(--radius);border-left:3px solid ' + nivelColor + ';gap:10px">';
+    html += '<div style="font-size:12px;color:var(--dark);flex:1">' + d.norma + '</div>';
+    html += '<div style="text-align:right;flex-shrink:0">';
+    html += '<div style="font-size:12px;font-weight:700;color:' + nivelColor + '">' + fmt(d.monto) + '</div>';
+    html += '<div style="font-size:10px;color:var(--gray4)">' + d.afectados + ' colab. afectado' + (d.afectados !== 1 ? 's' : '') + '</div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderAreas() {
+  const panel = document.getElementById('areas-panel');
+  const content = document.getElementById('areas-content');
+  if (!panel || !content) return;
+  if (!db.evaluaciones.length) { panel.style.display = 'none'; return; }
+  // Agrupar por área
+  const areaMap = {};
+  db.evaluaciones.forEach(function(e) {
+    const area = (e.area && e.area.trim()) ? e.area.trim() : 'Sin área especificada';
+    if (!areaMap[area]) areaMap[area] = [];
+    areaMap[area].push(e);
+  });
+  const areas = Object.keys(areaMap);
+  if (areas.length <= 1 && areas[0] === 'Sin área especificada') {
+    panel.style.display = 'none'; return;
+  }
+  panel.style.display = 'block';
+  const fmt = p => p >= 80 ? 'var(--green)' : p >= 50 ? 'var(--gold)' : 'var(--red)';
+  const fmtBg = p => p >= 80 ? 'var(--green2)' : p >= 50 ? 'var(--gold2)' : 'var(--red2)';
+  const fmtLabel = p => p >= 80 ? 'Cumplimiento Alto' : p >= 50 ? 'Cumplimiento Medio' : 'Cumplimiento Bajo';
+  // Sort areas by avg pct ascending (worst first)
+  const sorted = areas.map(function(a) {
+    const evs = areaMap[a];
+    const avg = Math.round(evs.reduce((s, e) => s + e.pct, 0) / evs.length);
+    return { area: a, evs: evs, avg: avg };
+  }).sort((a, b) => a.avg - b.avg);
+  let html = '<div style="display:flex;flex-direction:column;gap:8px">';
+  sorted.forEach(function(a) {
+    html += '<div style="padding:12px 14px;border:1px solid var(--gray3);border-radius:var(--radius);border-left:4px solid ' + fmt(a.avg) + '">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">';
+    html += '<div style="font-weight:600;font-size:13px;color:var(--navy)">' + a.area + '</div>';
+    html += '<div style="display:flex;align-items:center;gap:8px">';
+    html += '<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:' + fmtBg(a.avg) + ';color:' + fmt(a.avg) + '">' + fmtLabel(a.avg) + '</span>';
+    html += '<span style="font-size:18px;font-weight:700;color:' + fmt(a.avg) + '">' + a.avg + '%</span>';
+    html += '</div></div>';
+    // Mini barra
+    html += '<div style="background:var(--gray2);border-radius:6px;height:7px;overflow:hidden;margin-bottom:5px">';
+    html += '<div style="height:100%;width:' + a.avg + '%;background:' + fmt(a.avg) + ';border-radius:6px;transition:.5s ease"></div>';
+    html += '</div>';
+    html += '<div style="font-size:11px;color:var(--gray4)">' + a.evs.length + ' colaborador' + (a.evs.length !== 1 ? 'es' : '') + ' evaluado' + (a.evs.length !== 1 ? 's' : '') + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  content.innerHTML = html;
+}
+
 function updateKPIs(){
-  sv2('k-emp',db.empresas.length);
-  sv2('k-eva',db.evaluaciones.length);
-  if(db.evaluaciones.length>0){const avg=Math.round(db.evaluaciones.reduce((a,e)=>a+e.pct,0)/db.evaluaciones.length);sv2('k-cum',avg+'%');}
-  else sv2('k-cum','—');
+  renderMulta();
+  renderAreas();
 }
 function editEval(id){
   const e=db.evaluaciones.find(x=>x.id===id);
@@ -1644,7 +1803,8 @@ buildChecklist();
 buildCondicionantes();
 setDate();
 showPanel('inicio', document.querySelector('.nav-item'));
-renderRecent();
+renderMulta();
+renderAreas();
 </script>
 </body>
 </html>
