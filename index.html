@@ -1496,6 +1496,107 @@ function generarYImprimir(){
     });
   }
 
+  // ── ALERTA STPS + EXPOSICION LEGAL + AREAS (reporte impreso) ──
+
+  // 1. ALERTA STPS
+  h+='<div style="background:#7B1010;border-radius:6px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px">';
+  h+='<div style="font-size:18px;flex-shrink:0">🚨</div>';
+  h+='<div>';
+  h+='<div style="color:#fff;font-weight:700;font-size:10.5px;margin-bottom:3px;letter-spacing:.3px;text-transform:uppercase">Alerta de Inspeccion STPS 2025–2026</div>';
+  h+='<div style="color:rgba(255,255,255,.88);font-size:9px;line-height:1.6">La STPS tiene programadas <strong style="color:#FFD700">mas de 43,000 inspecciones</strong> para el periodo 2025–2026, con enfasis en empresas del sector <strong style="color:#FFD700">comercio, servicios e industria</strong>. La Ley Silla (vigente desde el 15-dic-2025) es uno de los ejes prioritarios de verificacion. El Reglamento Interior de Trabajo debia actualizarse para incluir el derecho a sillas — <strong style="color:#FFD700">plazo vencido desde el 14-dic-2025. ¿Ya lo actualizaste?</strong></div>';
+  h+='</div></div>';
+
+  // 2. ESTIMADOR DE EXPOSICION LEGAL
+  var _UMA = 117.31;
+  var _UMA_MIN = 50;
+  var _INFRAC = [
+    {norma:'Art. 132 LFT — Sin sillas con respaldo', items:[0,1,2,9]},
+    {norma:'Art. 133 LFT — Restriccion a sentarse', items:[3,4,5]},
+    {norma:'Art. 422-423 LFT — Reglamento Interior desactualizado', items:[10]},
+    {norma:'NOM-030-STPS — Sin programa de pausas/capacitacion', items:[6,7,13]},
+    {norma:'DOF 17-jul-2025 — Sin areas/senalizacion de descanso', items:[8,12]},
+    {norma:'NOM-019-STPS — Sin Comision de Seguridad e Higiene activa', items:[15]}
+  ];
+  var _fmt = function(n){return '$'+n.toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});};
+  var _totalMulta=0; var _detalles=[];
+  _INFRAC.forEach(function(inf){
+    var inc=0,tot=0;
+    inf.items.forEach(function(idx){
+      evals.forEach(function(e){tot++;if((e.noCumple||[]).indexOf(idx)!==-1)inc++;});
+    });
+    var pctInc=tot>0?inc/tot:0;
+    var afect=Math.round(pctInc*evals.length);
+    if(afect>0){var monto=_UMA_MIN*_UMA*afect;_totalMulta+=monto;_detalles.push({norma:inf.norma,afect:afect,monto:monto});}
+  });
+
+  if(evals.length>0){
+    var _nivelC=_totalMulta>200000?'#C0392B':_totalMulta>80000?'#C9882A':'#1A7A4A';
+    var _nivelL=_totalMulta>200000?'EXPOSICION ALTA':_totalMulta>80000?'EXPOSICION MODERADA':'EXPOSICION BAJA';
+    h+='<div style="border:1px solid #D5D9E2;border-radius:6px;padding:11px 14px;margin-bottom:14px">';
+    h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">';
+    h+='<div style="font-size:13px">⚖️</div>';
+    h+='<div style="font-weight:700;color:#0D2545;font-size:10px;text-transform:uppercase;letter-spacing:.3px">Estimador de Exposicion Legal — Referencial</div>';
+    h+='</div>';
+    if(_totalMulta===0){
+      h+='<div style="background:#E4F5EC;border-radius:4px;padding:8px 12px;font-size:9px;color:#1A7A4A;font-weight:600">✅ No se detectaron incumplimientos con exposicion economica estimada. Mantener los controles documentados como evidencia ante inspeccion STPS.</div>';
+    } else {
+      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px">';
+      h+='<div><div style="font-size:8.5px;font-weight:700;color:'+_nivelC+';letter-spacing:.4px;text-transform:uppercase">'+_nivelL+'</div>';
+      h+='<div style="font-size:24px;font-weight:700;color:'+_nivelC+';line-height:1">'+_fmt(_totalMulta)+'</div>';
+      h+='<div style="font-size:8px;color:#9BA4B5;margin-top:2px">Exposicion legal minima estimada · '+evals.length+' colaborador'+(evals.length!==1?'es':'')+' evaluado'+(evals.length!==1?'s':'')+'</div></div>';
+      h+='<div style="text-align:right;flex-shrink:0"><div style="font-size:8px;color:#9BA4B5">Tipos de infraccion</div><div style="font-size:20px;font-weight:700;color:#0D2545">'+_detalles.length+'</div></div>';
+      h+='</div>';
+      h+='<div style="display:flex;flex-direction:column;gap:4px">';
+      _detalles.forEach(function(d){
+        h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 9px;background:#F7F8FA;border-radius:4px;border-left:3px solid '+_nivelC+';gap:8px">';
+        h+='<div style="font-size:8.5px;color:#1A1F2E;flex:1">'+d.norma+'</div>';
+        h+='<div style="text-align:right;flex-shrink:0"><div style="font-size:9px;font-weight:700;color:'+_nivelC+'">'+_fmt(d.monto)+'</div>';
+        h+='<div style="font-size:7.5px;color:#9BA4B5">'+d.afect+' colab.</div></div>';
+        h+='</div>';
+      });
+      h+='</div>';
+    }
+    h+='<div style="margin-top:8px;font-size:7.5px;color:#9BA4B5;line-height:1.4;border-top:1px solid #EEF0F4;padding-top:7px"><strong>Nota metodologica:</strong> Estimacion basada en rangos minimos LFT (50 UMAs por infraccion) · UMA 2026: $117.31 (DOF, vigente 1-feb-2026). El monto real dependera del criterio del inspector, reincidencia y antecedentes del centro de trabajo. Calculo estrictamente referencial — no constituye determinacion oficial de sancion.</div>';
+    h+='<div style="margin-top:10px;text-align:center;padding:7px;background:#E8F4FD;border-radius:5px;font-size:8.5px;color:#1A56A0;font-weight:600">Para reducir este riesgo contacta a Insignia AGC: www.insigniaagc.com · WhatsApp: 663 429 0003</div>';
+    h+='</div>';
+  }
+
+  // 3. CUMPLIMIENTO POR AREA (solo si hay 2+ areas distintas con nombres reales)
+  if(evals.length>0){
+    var _areaMap={};
+    evals.forEach(function(e){
+      var a=(e.area&&e.area.trim())?e.area.trim():'';
+      if(a&&a.length>2){if(!_areaMap[a])_areaMap[a]=[];_areaMap[a].push(e);}
+    });
+    var _areas=Object.keys(_areaMap);
+    if(_areas.length>=2){
+      var _sorted=_areas.map(function(a){
+        var evs=_areaMap[a];
+        var avg=Math.round(evs.reduce(function(s,e){return s+e.pct;},0)/evs.length);
+        return {area:a,count:evs.length,avg:avg};
+      }).sort(function(a,b){return a.avg-b.avg;});
+      h+='<div style="border:1px solid #D5D9E2;border-radius:6px;padding:11px 14px;margin-bottom:14px">';
+      h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">';
+      h+='<div style="font-size:13px">🗂️</div>';
+      h+='<div style="font-weight:700;color:#0D2545;font-size:10px;text-transform:uppercase;letter-spacing:.3px">Cumplimiento por Area de Trabajo</div>';
+      h+='</div>';
+      h+='<div style="display:flex;flex-direction:column;gap:5px">';
+      _sorted.forEach(function(a){
+        var ac=a.avg>=80?'#1A7A4A':a.avg>=50?'#C9882A':'#C0392B';
+        var abg=a.avg>=80?'#E4F5EC':a.avg>=50?'#FEF3DC':'#FDECEB';
+        var al=a.avg>=80?'Alto':a.avg>=50?'Medio':'Bajo';
+        h+='<div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border:1px solid #EEF0F4;border-radius:4px;border-left:3px solid '+ac+'">';
+        h+='<div style="flex:1"><div style="font-size:9.5px;font-weight:600;color:#0D2545">'+a.area+'</div>';
+        h+='<div style="font-size:7.5px;color:#9BA4B5;margin-top:1px">'+a.count+' colaborador'+(a.count!==1?'es':'')+' evaluado'+(a.count!==1?'s':'')+'</div></div>';
+        h+='<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">';
+        h+='<div style="width:80px;background:#EEF0F4;border-radius:4px;height:6px;overflow:hidden"><div style="height:100%;width:'+a.avg+'%;background:'+ac+';border-radius:4px"></div></div>';
+        h+='<span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:'+abg+';color:'+ac+'">'+al+' · '+a.avg+'%</span>';
+        h+='</div></div>';
+      });
+      h+='</div></div>';
+    }
+  }
+
   // NORMATIVA
   h+='<div class="st">3. Marco Normativo Aplicable</div><ul class="n">';
   ['Art. 132 LFT — Obligacion del patron de proveer sillas con respaldo',
