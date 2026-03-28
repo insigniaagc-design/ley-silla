@@ -261,13 +261,9 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo" style="padding:16px 18px 14px">
     <a class="logo-mark" href="https://www.insigniaagc.com" target="_blank" style="display:flex;align-items:center;gap:10px;text-decoration:none">
-      <img src="https://www.insigniaagc.com/wp-content/uploads/2024/01/insignia-logo.png"
-           alt="Insignia AGC"
-           style="height:36px;object-fit:contain;filter:brightness(0) invert(1);opacity:.9"
-           onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'">
-      <div id="logo-fallback" style="display:none;width:36px;height:36px;background:linear-gradient(135deg,var(--sky),var(--blue2));border-radius:9px;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚖️</div>
+      <img src="data:image/png;base64,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" alt="Insignia AGC" style="height:40px;object-fit:contain;filter:brightness(0) invert(1);opacity:.95">
       <div class="logo-text">
-        <span class="logo-title" style="font-size:15px">Insignia AGC</span>
+        <span class="logo-title" style="font-size:16px">Insignia AGC</span>
         <span class="logo-sub">DIAGNÓSTICO INFORMATIVO</span>
       </div>
     </a>
@@ -278,8 +274,8 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
     <div class="nav-section">Registro</div>
     <div class="nav-item" onclick="showPanel('empresa',this)"><span class="ni">🏢</span> Datos del patrón</div>
     <div class="nav-section">Diagnóstico</div>
-    <div class="nav-item" onclick="showPanel('evaluacion',this)"><span class="ni">📋</span> Evaluar puestos</div>
-    <div class="nav-item" onclick="showPanel('riesgo',this)"><span class="ni">📊</span> Nivel de riesgo</div>
+    <div class="nav-item" onclick="showPanel('evaluacion',this)"><span class="ni">📋</span> Evaluar colaboradores</div>
+
     <div class="nav-section">Resultados</div>
     <div class="nav-item" onclick="showPanel('reporte',this)"><span class="ni">📄</span> Imprimir reporte</div>
   </nav>
@@ -476,8 +472,31 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
           <div class="field form-full"><label>Observaciones del colaborador</label><textarea id="ev-hallazgos" placeholder="¿Cómo describes las condiciones de tu puesto? Puedes mencionar: tipo de piso, estado del mobiliario, si tienes acceso a silla, malestares frecuentes, condiciones del área..."></textarea></div>
           <!-- ev-correctivas: solo para Insignia AGC — no visible para el usuario --><textarea id="ev-correctivas" style="display:none"></textarea>
         </div>
+        <hr class="divider">
+        <div class="card-header" style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--gray2)">
+          <div class="card-icon ci-red">📊</div>
+          <div>
+            <div class="card-title">Nivel de riesgo por bipedestación</div>
+            <div class="card-desc">Disposición Quinta · 7 condicionantes STPS · DOF 17-jul-2025</div>
+          </div>
+        </div>
+        <div class="alert alert-info" style="display:block;line-height:1.6">📊 Responde las 7 condicionantes para determinar el nivel de riesgo ergonómico de este colaborador (Bajo / Medio / Alto).</div>
+        <div class="section-label" style="margin-top:8px">Condicionantes de evaluación (1 = mejor condición · 3 = peor condición)</div>
+        <div id="condicionantes-wrap"></div>
+        <div class="riesgo-wrap" id="riesgo-result">
+          <div class="riesgo-head">Resultado — Nivel de riesgo</div>
+          <div class="riesgo-grid" id="riesgo-detalle"></div>
+          <div class="riesgo-total">
+            <div><div style="font-size:12px;color:var(--gray4);margin-bottom:2px">PUNTAJE TOTAL</div><div class="riesgo-score" id="r-total">0</div><div style="font-size:11px;color:var(--gray4)">de 21 puntos posibles</div></div>
+            <div class="riesgo-status" id="r-nivel"></div>
+          </div>
+        </div>
+        <div class="form-grid" style="margin-top:14px">
+          <div class="field form-full"><label>Observaciones adicionales del colaborador (opcional)</label><textarea id="r-obs" placeholder="Tipo de calzado, estado del piso, condición de salud, embarazo, lesión previa..."></textarea></div>
+        </div>
+
         <div class="btn-row">
-          <button class="btn btn-primary" onclick="saveEval()">💾 Guardar evaluación</button>
+          <button class="btn btn-primary" onclick="saveEval()">💾 Guardar evaluación completa</button>
           <button class="btn btn-accent" onclick="calcScore()">📊 Calcular cumplimiento</button>
           <button class="btn btn-secondary" onclick="saveAndNewEval()" style="background:var(--green2);color:var(--green);border-color:rgba(26,122,74,.3)">➕ Guardar y evaluar otro colaborador</button>
           <button class="btn btn-secondary" onclick="clearEval()">🗑 Limpiar</button>
@@ -493,41 +512,6 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
             <span id="eval-history-arrow" style="font-size:13px;color:var(--gray4);transition:.2s">▼</span>
           </div>
           <div id="eval-history-list" style="display:none;margin-top:8px;display:none"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ NIVEL DE RIESGO ══ -->
-    <div id="panel-riesgo" class="panel">
-      <div class="card">
-        <div class="card-header"><div class="card-icon ci-red">📊</div><div><div class="card-title">Determinación del nivel de riesgo por bipedestación</div><div class="card-desc">Disposición Quinta · 7 condicionantes STPS · DOF 17-jul-2025</div></div></div>
-        <div class="alert alert-info" style="display:block;line-height:1.6">📋 Responde cada pregunta según tu situación real y actual en tu puesto de trabajo. No hay respuestas correctas o incorrectas.</div>
-        <div id="riesgo-patron-banner" style="margin-bottom:14px"></div>
-        <div class="form-grid">
-          <div class="field"><label>Persona trabajadora *</label><input id="r-trabajador" placeholder="Nombre completo"></div>
-          <div class="field"><label>Puesto de trabajo</label><input id="r-puesto" placeholder="Cajero/a, Vigilante..."></div>
-          <div class="field"><label>Área</label><input id="r-area" placeholder="Caja, Mostrador..."></div>
-        </div>
-        <div class="section-label" style="margin-top:16px">Condicionantes de evaluación (1 = mejor condición · 3 = peor condición)</div>
-
-        <div id="condicionantes-wrap"></div>
-
-        <div class="riesgo-wrap" id="riesgo-result">
-          <div class="riesgo-head">Resultado de la evaluación de riesgo</div>
-          <div class="riesgo-grid" id="riesgo-detalle"></div>
-          <div class="riesgo-total">
-            <div><div style="font-size:12px;color:var(--gray4);margin-bottom:2px">PUNTAJE TOTAL</div><div class="riesgo-score" id="r-total">0</div><div style="font-size:11px;color:var(--gray4)">de 21 puntos posibles</div></div>
-            <div class="riesgo-status" id="r-nivel"></div>
-          </div>
-        </div>
-
-        <div class="form-grid" style="margin-top:14px">
-          <div class="field form-full"><label>Observaciones del colaborador (opcional)</label><textarea id="r-obs" placeholder="¿Tienes alguna condición especial que quieras mencionar? Por ejemplo: tipo de calzado que usas, estado del piso en tu área, condición de salud, embarazo, lesión previa..."></textarea></div>
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-primary" onclick="saveRiesgo()">💾 Guardar evaluación de riesgo</button>
-          <button class="btn btn-accent" onclick="calcRiesgo()">📊 Calcular nivel de riesgo</button>
-          <button class="btn btn-secondary" onclick="clearRiesgo()">🗑 Limpiar</button>
         </div>
       </div>
     </div>
@@ -650,6 +634,8 @@ function capitalizarNombre(str){
 const SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyDFuZFIbIG3-RXFKtga7_1qinvGgviwlFn37UD_6c17KIuMGAvBLUhWSUjrT2_RDmu/exec';
 
 let db = {empresas:[], evaluaciones:[], riesgos:[], recorridos:[], pausas:[], tipoPerson:'moral'};
+let _evalGuardada = false;
+let _editingEvalId = null;
 try{localStorage.removeItem('leysilla_mx_v1');}catch(e){}
 
 function persist(){
@@ -667,7 +653,7 @@ function toast(msg,type='success'){
 }
 
 // ── NAV ──
-const TITLES={inicio:['Panel de control','Resumen general'],empresa:['Registro del patrón','Datos del centro de trabajo'],evaluacion:['Evaluar puesto de trabajo','Lista de verificación Art. 132-133 LFT'],riesgo:['Nivel de riesgo por bipedestación','7 condicionantes STPS · Disposición Quinta'],recorrido:['Acta de recorrido de verificación','Comisión de Seguridad e Higiene · Apdo. B y C STPS'],pausas:['Pausas activas','Bitácora de descansos'],base:['Base de datos','Registros almacenados'],reporte:['Generar reporte','Informe para STPS / cliente']};
+const TITLES={inicio:['Panel de control','Resumen general'],empresa:['Registro del patrón','Datos del centro de trabajo'],evaluacion:['Evaluar colaborador','Checklist Ley Silla + Nivel de riesgo STPS por persona trabajadora'],riesgo:['Nivel de riesgo por bipedestación','7 condicionantes STPS · Disposición Quinta'],recorrido:['Acta de recorrido de verificación','Comisión de Seguridad e Higiene · Apdo. B y C STPS'],pausas:['Pausas activas','Bitácora de descansos'],base:['Base de datos','Registros almacenados'],reporte:['Generar reporte','Informe para STPS / cliente']};
 function showPanel(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -680,7 +666,7 @@ function showPanel(id,el){
   if(id==='reporte')populateSelect();
   if(id==='inicio')renderRecent();
   if(id==='evaluacion'){renderEvalHistory();showPatronBanners();}
-  if(id==='riesgo')showPatronBanners();
+
   closeSidebar();
 }
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('active')}
@@ -786,6 +772,16 @@ function saveEval(){
   const jornadaOtroEl=document.getElementById('ev-jornada-otro');
   const jornada=jornadaEl&&jornadaEl.value==='Otro'?(jornadaOtroEl?jornadaOtroEl.value:'Otro'):(jornadaEl?jornadaEl.value:'');
 
+  // Riesgo data from condicionantes
+  let riesgoTotal=0, riesgoDetalle=[];
+  CONDICIONANTES.forEach(con=>{
+    const v=document.querySelector(`input[name="${con.id}"]:checked`);
+    const pts=v?parseInt(v.value):0;
+    riesgoTotal+=pts;
+    riesgoDetalle.push({label:con.label,pts,txt:v?con.opts.find(o=>o.val===pts)?.txt||'—':'No evaluado'});
+  });
+  const riesgoNivel=riesgoTotal<=7?'Bajo':riesgoTotal<=14?'Medio':'Alto';
+
   // MODE: editing existing
   if(_editingEvalId){
     const idx=db.evaluaciones.findIndex(e=>e.id===_editingEvalId);
@@ -800,6 +796,8 @@ function saveEval(){
         cumple,noCumple,pct,
         hallazgos:document.getElementById('ev-hallazgos').value||'',
         correctivas:gv('ev-correctivas'),
+        riesgoTotal,riesgoNivel,riesgoDetalle,
+        riesgoObs:document.getElementById('r-obs').value||'',
         fecha:new Date().toLocaleDateString('es-MX')
       };
       persist();
@@ -807,11 +805,11 @@ function saveEval(){
       _evalGuardada=true;
       _editingEvalId=null;
       const editBtn=document.querySelector('button[onclick="saveEval()"]');
-      if(editBtn){editBtn.textContent='💾 Guardar evaluación';editBtn.style.background='';}
+      if(editBtn){editBtn.textContent='💾 Guardar evaluación completa';editBtn.style.background='';}
       const banner=document.getElementById('edit-mode-banner');
       if(banner)banner.style.display='none';
       renderEvalHistory();
-      toast('✅ Evaluacion actualizada — '+pct+'%','success');
+      toast('✅ Evaluacion actualizada — '+pct+'% · Riesgo '+riesgoNivel,'success');
     }
     return;
   }
@@ -826,6 +824,8 @@ function saveEval(){
     cumple,noCumple,pct,
     hallazgos:document.getElementById('ev-hallazgos').value||'',
     correctivas:gv('ev-correctivas'),
+    riesgoTotal,riesgoNivel,riesgoDetalle,
+    riesgoObs:document.getElementById('r-obs').value||'',
     fecha:new Date().toLocaleDateString('es-MX'),
     id:Date.now()
   };
@@ -834,7 +834,7 @@ function saveEval(){
   sendToSheets('EVALUACION',r);
   _evalGuardada=true;
   renderEvalHistory();
-  toast('✅ Evaluacion guardada — '+pct+'%','success');
+  toast('✅ Guardado — '+pct+'% cumplimiento · Riesgo '+riesgoNivel,'success');
 }
 
 function clearEval(){
@@ -852,6 +852,16 @@ function clearEval(){
   const sf=document.getElementById('score-fill');if(sf){sf.style.width='0%';sf.className='score-fill';}
   sv2('score-pct','0%');
   const ss=document.getElementById('score-status');if(ss){ss.className='score-status';ss.textContent='';}
+  // Clear condicionantes radios
+  CONDICIONANTES.forEach(con=>{
+    document.querySelectorAll(`input[name="${con.id}"]`).forEach(r=>r.checked=false);
+  });
+  // Clear riesgo result
+  const rr=document.getElementById('riesgo-result');if(rr)rr.classList.remove('visible');
+  const rd=document.getElementById('riesgo-detalle');if(rd)rd.innerHTML='';
+  sv2('r-total','0');
+  const rn=document.getElementById('r-nivel');if(rn){rn.className='riesgo-status';rn.textContent='';}
+  sv3('r-obs','');
   window.scrollTo({top:0,behavior:'smooth'});
   _evalGuardada=false;
 }
@@ -874,22 +884,8 @@ function calcRiesgo(){
   else{nivel.classList.add('rs-alto');nivel.textContent='🔴 Riesgo ALTO (15-21pts)';}
   return {total,detalle};
 }
-function saveRiesgo(){
-  const trab=document.getElementById('r-trabajador').value.trim();
-  if(!trab){toast('El nombre de la persona trabajadora es obligatorio','error');return;}
-  const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1].razon:'(Sin patrón registrado)';
-  const result=calcRiesgo();
-  const nivel=result.total<=7?'Bajo':result.total<=14?'Medio':'Alto';
-  const r={empresa,trabajador:trab,puesto:document.getElementById('r-puesto').value,area:document.getElementById('r-area').value,
-    puntaje:result.total,nivel,detalle:result.detalle,obs:document.getElementById('r-obs').value,
-    fecha:new Date().toLocaleDateString('es-MX'),id:Date.now()};
-  db.riesgos.push(r);persist();toast(`✅ Evaluación de riesgo guardada — Nivel: ${nivel} (${result.total}pts)`);
-}
-function clearRiesgo(){
-  ['r-empresa','r-trabajador','r-puesto','r-area','r-obs'].forEach(id=>document.getElementById(id).value='');
-  document.querySelectorAll('input[name^="c"]').forEach(r=>r.checked=false);
-  document.getElementById('riesgo-result').classList.remove('visible');
-}
+function saveRiesgo(){/* integrated into saveEval */}
+function clearRiesgo(){clearEval();} // now part of clearEval
 
 // ── RECORRIDO ──
 function saveRecorrido(){/* panel removed */}
@@ -972,6 +968,18 @@ function editEval(id){
     if(si)si.checked=wasSi;
     if(no)no.checked=wasNo;
   });
+  // Restore condicionantes
+  if(e.riesgoDetalle&&e.riesgoDetalle.length){
+    CONDICIONANTES.forEach((con,i)=>{
+      const det=e.riesgoDetalle[i];
+      if(det&&det.pts>0){
+        const radio=document.querySelector(`input[name="${con.id}"][value="${det.pts}"]`);
+        if(radio)radio.checked=true;
+      }
+    });
+    calcRiesgo();
+  }
+  sv3('r-obs',e.riesgoObs||'');
   // Calculate score to show current state
   calcScore();
   // Set edit mode
@@ -1013,8 +1021,11 @@ function renderRecent(){
   const div=document.getElementById('recent-evals');
   if(!db.evaluaciones.length){div.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin evaluaciones</div><div class="empty-desc">Ve a "Evaluar puesto" para comenzar</div></div>';return;}
   const cls=p=>p>=80?'high':p>=50?'mid':'low';
-  div.innerHTML='<div class="table-wrap"><table class="data-table"><thead><tr><th>Patrón</th><th>Puesto</th><th>Trabajador/a</th><th>Cumplimiento</th><th>Fecha</th></tr></thead><tbody>'+
-    db.evaluaciones.slice(-6).reverse().map(e=>`<tr><td>${e.empresa}</td><td>${e.puesto}</td><td>${e.trabajador||'—'}</td><td><span class="badge badge-${cls(e.pct)}">${e.pct}%</span></td><td>${e.fecha}</td></tr>`).join('')+'</tbody></table></div>';
+  div.innerHTML='<div class="table-wrap"><table class="data-table"><thead><tr><th>Patrón</th><th>Puesto</th><th>Trabajador/a</th><th>Cumplimiento</th><th>Riesgo</th><th>Fecha</th></tr></thead><tbody>'+
+    db.evaluaciones.slice(-6).reverse().map(e=>{
+      const rcl=e.riesgoNivel==='Bajo'?'badge-high':e.riesgoNivel==='Medio'?'badge-mid':'badge-low';
+      return `<tr><td>${e.empresa}</td><td>${e.puesto}</td><td>${e.trabajador||'—'}</td><td><span class="badge badge-${cls(e.pct)}">${e.pct}%</span></td><td>${e.riesgoNivel?`<span class="badge ${rcl}">${e.riesgoNivel}</span>`:'—'}</td><td>${e.fecha}</td></tr>`;
+    }).join('')+'</tbody></table></div>';
 }
 
 // ── SELECT REPORTE ──
@@ -1088,19 +1099,20 @@ function buildReportText(evaluador){
     });txt+='\n';
   }
 
-  if(riesgos.length>0){
+  // Nivel de riesgo now embedded in evaluaciones
+  const evalsConRiesgo=evals.filter(e=>e.riesgoNivel);
+  if(evalsConRiesgo.length>0){
     txt+='──────────────────────────────────────────────────────────────────\n';
     txt+='4. NIVEL DE RIESGO POR BIPEDESTACIÓN (DISPOSICIÓN QUINTA STPS)\n';
     txt+='──────────────────────────────────────────────────────────────────\n';
-    txt+='Esta evaluación analiza 7 factores del puesto: tiempo continuo de pie,\n';
-    txt+='posibilidad de cambiar de postura, tipo de superficie del piso,\n';
-    txt+='características del calzado, espacio disponible, malestares reportados\n';
-    txt+='y existencia de pausas programadas.\n\n';
-    riesgos.forEach((r,i)=>{
-      const rcl=r.nivel==='Bajo'?'✅':r.nivel==='Medio'?'⚠️':'🔴';
-      txt+=`[${i+1}] ${r.trabajador} | Puesto: ${r.puesto||'—'} | Área: ${r.area||'—'}\n`;
-      txt+=`    Puntaje: ${r.puntaje}/21 pts — Nivel de riesgo: ${rcl} ${r.nivel}\n`;
-      if(r.obs)txt+=`    Observaciones: ${r.obs}\n`;
+    txt+='Esta evaluación analiza 7 factores: tiempo continuo de pie, posibilidad\n';
+    txt+='de cambiar de postura, tipo de piso, calzado, espacio disponible,\n';
+    txt+='malestares reportados y existencia de pausas programadas.\n\n';
+    evalsConRiesgo.forEach((e,i)=>{
+      const rcl=e.riesgoNivel==='Bajo'?'✅':e.riesgoNivel==='Medio'?'⚠️':'🔴';
+      txt+=`[${i+1}] ${e.trabajador||e.puesto} | Puesto: ${e.puesto||'—'} | Área: ${e.area||'—'}\n`;
+      txt+=`    Puntaje: ${e.riesgoTotal}/21 pts — Nivel de riesgo: ${rcl} ${e.riesgoNivel}\n`;
+      if(e.riesgoObs)txt+=`    Observaciones: ${e.riesgoObs}\n`;
       txt+='\n';
     });
   }
@@ -1296,7 +1308,10 @@ function renderEvalHistory(){
         <div style="font-size:13px;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nombre}</div>
         <div style="font-size:11px;color:var(--gray4);margin-top:1px">${e.puesto||'—'} · ${e.area||'—'}</div>
       </div>
-      <div style="background:${bg(e.pct)};color:${cls(e.pct)};font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap">${e.pct}%</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;white-space:nowrap">
+        <div style="background:${bg(e.pct)};color:${cls(e.pct)};font-size:12px;font-weight:700;padding:2px 9px;border-radius:20px">${e.pct}%</div>
+        ${e.riesgoNivel?`<div style="font-size:10px;font-weight:600;color:${e.riesgoNivel==='Bajo'?'var(--green)':e.riesgoNivel==='Medio'?'var(--gold)':'var(--red)'}">Riesgo ${e.riesgoNivel}</div>`:''}
+      </div>
       <div style="display:flex;gap:5px;flex-shrink:0">
         <button onclick="editEval(${e.id})" title="Editar"
           style="background:var(--sky2);color:var(--blue2);border:1px solid rgba(34,113,195,.2);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:var(--font-body)">✏️</button>
