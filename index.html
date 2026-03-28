@@ -411,7 +411,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
         <div class="alert alert-info" style="display:block;line-height:1.6">💡 Responde según lo que vives en tu puesto de trabajo. Cuando termines puedes guardar y evaluar a otro colaborador.</div>
         <div class="form-grid">
           <div class="field"><label>Nombre del puesto *</label><input id="ev-puesto" placeholder="Cajero/a, Vendedor/a, Vigilante..."></div>
-          <div class="field"><label>Nombre de la persona trabajadora</label><input id="ev-trabajador" placeholder="Nombre(s) · Apellido Paterno · Apellido Materno"></div>
+          <div class="field"><label>Nombre de la persona trabajadora</label><input id="ev-trabajador" placeholder="Nombre(s) · Apellido Paterno · Apellido Materno" onblur="this.value=capitalizarNombre(this.value)"></div>
           <div class="field"><label>Área o departamento</label><input id="ev-area" placeholder="Caja, Mostrador, Producción..."></div>
           <div class="field"><label>Tipo de jornada</label>
             <select id="ev-jornada">
@@ -431,6 +431,13 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
           </div>
         </div>
       </div>
+      <!-- Edit mode banner -->
+      <div id="edit-mode-banner" style="display:none;align-items:center;gap:10px;padding:11px 14px;background:var(--teal2);border:1px solid var(--teal);border-radius:var(--radius);margin-bottom:14px">
+        <span style="font-size:16px">✏️</span>
+        <span style="font-size:13px;color:var(--teal);font-weight:500">Editando evaluación de: <strong class="edit-nombre"></strong></span>
+        <button onclick="cancelEdit()" style="margin-left:auto;background:none;border:1px solid var(--teal);color:var(--teal);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:var(--font-body)">✕ Cancelar edición</button>
+      </div>
+
       <div class="card">
         <div class="card-header"><div class="card-icon ci-teal">✅</div><div><div class="card-title">Lista de verificación de cumplimiento</div><div class="card-desc">Marca según lo observado en campo durante el recorrido</div></div></div>
         <div class="check-wrap">
@@ -604,6 +611,10 @@ function gv(id){const el=document.getElementById(id);return el?el.value:'';}
 function sv2(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
 function sv3(id,val){const el=document.getElementById(id);if(el)el.value=val;}
 function ge(id){return document.getElementById(id);}
+function capitalizarNombre(str){
+  if(!str)return str;
+  return str.trim().split(' ').map(w=>w.length>0?w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():w).join(' ');
+}
 // Pega la URL de tu Google Apps Script Web App aquí abajo.
 // Esta información NO es visible para los usuarios.
 // ═══════════════════════════════════════════════════════
@@ -734,6 +745,35 @@ function saveEval(){
   const empresa=db.empresas.length>0?db.empresas[db.empresas.length-1].razon:'(Sin patrón registrado)';
   let cumple=[],noCumple=[];
   ITEMS.forEach((_,i)=>{const v=document.querySelector(`input[name="ci${i}"]:checked`);if(v){if(v.value==='si')cumple.push(i+1);else noCumple.push(i+1);}});
+  // If editing existing eval — UPDATE instead of create
+  if(_editingEvalId){
+    const idx=db.evaluaciones.findIndex(e=>e.id===_editingEvalId);
+    if(idx>=0){
+      const pct=Math.round((cumple.length/ITEMS.length)*100);
+      const bipe=document.querySelector('input[name="bipe"]:checked');
+      db.evaluaciones[idx]={...db.evaluaciones[idx],puesto,
+        trabajador:capitalizarNombre(document.getElementById('ev-trabajador').value),
+        area:document.getElementById('ev-area').value,
+        jornada:document.getElementById('ev-jornada').value,
+        bipedestacion:bipe?bipe.value:'',
+        cumple,noCumple,pct,
+        hallazgos:document.getElementById('ev-hallazgos').value,
+        correctivas:gv('ev-correctivas'),
+        fecha:new Date().toLocaleDateString('es-MX')};
+      persist();
+      sendToSheets('EVALUACION',db.evaluaciones[idx]);
+      _evalGuardada=true;
+      _editingEvalId=null;
+      // Restore button
+      const btn=document.querySelector('button[onclick="saveEval()"]');
+      if(btn){btn.textContent='💾 Guardar evaluación';btn.style.background='';}
+      const banner=document.getElementById('edit-mode-banner');
+      if(banner)banner.style.display='none';
+      renderEvalHistory();
+      toast(`✅ Evaluación actualizada — ${pct}%`,'success');
+    }
+    return;
+  }
   const pct=Math.round((cumple.length/ITEMS.length)*100);
   const r={empresa,puesto,trabajador:document.getElementById('ev-trabajador').value,area:document.getElementById('ev-area').value,
     jornada:document.getElementById('ev-jornada').value,bipedestacion:getBipedestacion(),cumple,noCumple,pct,
@@ -757,6 +797,7 @@ function clearEval(){
   sv2('score-pct','0%');
   const ss=document.getElementById('score-status');if(ss){ss.className='score-status';ss.textContent='';}
   window.scrollTo({top:0,behavior:'smooth'});
+  _evalGuardada=false;
 }
 
 // ── RIESGO ──
@@ -842,6 +883,64 @@ function updateKPIs(){
   if(db.evaluaciones.length>0){const avg=Math.round(db.evaluaciones.reduce((a,e)=>a+e.pct,0)/db.evaluaciones.length);sv2('k-cum',avg+'%');}
   else sv2('k-cum','—');
 }
+function editEval(id){
+  const e=db.evaluaciones.find(x=>x.id===id);
+  if(!e)return;
+  // Scroll to top of eval panel
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Fill form fields
+  sv3('ev-puesto', e.puesto||'');
+  sv3('ev-trabajador', e.trabajador||'');
+  sv3('ev-area', e.area||'');
+  sv3('ev-jornada', e.jornada||'');
+  sv3('ev-hallazgos', e.hallazgos||'');
+  sv3('ev-correctivas', e.correctivas||'');
+  // Restore bipedestacion
+  document.querySelectorAll('input[name="bipe"]').forEach(r=>{r.checked=(r.value===e.bipedestacion);});
+  // Restore checklist items
+  ITEMS.forEach((_,i)=>{
+    const numItem=i+1;
+    const wasSi=(e.cumple||[]).includes(numItem);
+    const wasNo=(e.noCumple||[]).includes(numItem);
+    const si=document.querySelector(`input[name="ci${i}"][value="si"]`);
+    const no=document.querySelector(`input[name="ci${i}"][value="no"]`);
+    if(si)si.checked=wasSi;
+    if(no)no.checked=wasNo;
+  });
+  // Calculate score to show current state
+  calcScore();
+  // Set edit mode
+  _editingEvalId=id;
+  _evalGuardada=false;
+  // Update button text
+  const btn=document.querySelector('button[onclick="saveEval()"]');
+  if(btn){btn.textContent='💾 Actualizar evaluación';btn.style.background='var(--teal)';}
+  // Show edit banner
+  const banner=document.getElementById('edit-mode-banner');
+  if(banner){banner.style.display='flex';banner.querySelector('.edit-nombre').textContent=e.trabajador||e.puesto||'colaborador/a';}
+  toast('✏️ Editando: '+(e.trabajador||e.puesto||'evaluación'),'success');
+}
+
+function cancelEdit(){
+  _editingEvalId=null;
+  _evalGuardada=false;
+  clearEval();
+  // Restore button
+  const btn=document.querySelector('button[onclick="saveEval()"]');
+  if(btn){btn.textContent='💾 Guardar evaluación';btn.style.background='';}
+  const banner=document.getElementById('edit-mode-banner');
+  if(banner)banner.style.display='none';
+  toast('Edición cancelada','success');
+}
+
+function deleteEvalById(id){
+  if(!confirm('¿Eliminar esta evaluacion?'))return;
+  db.evaluaciones=db.evaluaciones.filter(e=>e.id!==id);
+  renderEvalHistory();
+  updateKPIs();
+  toast('Evaluacion eliminada','success');
+}
+
 updateKPIs();
 
 // ── RECENT ──
@@ -1134,6 +1233,12 @@ function renderEvalHistory(){
         <div style="font-size:11px;color:var(--gray4);margin-top:1px">${e.puesto||'—'} · ${e.area||'—'}</div>
       </div>
       <div style="background:${bg(e.pct)};color:${cls(e.pct)};font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap">${e.pct}%</div>
+      <div style="display:flex;gap:5px;flex-shrink:0">
+        <button onclick="editEval(${e.id})" title="Editar"
+          style="background:var(--sky2);color:var(--blue2);border:1px solid rgba(34,113,195,.2);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:var(--font-body)">✏️</button>
+        <button onclick="deleteEvalById(${e.id})" title="Eliminar"
+          style="background:var(--red2);color:var(--red);border:1px solid rgba(192,57,43,.2);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:var(--font-body)">✕</button>
+      </div>
     </div>`;
   }).join('');
 }
@@ -1151,12 +1256,22 @@ function updateEvalHistory(){renderEvalHistory();}
 
 // ── SAVE AND NEW EVAL ──
 function saveAndNewEval(){
-  saveEval();
-  setTimeout(()=>{
+  if(!_evalGuardada){
+    // No se ha guardado aun — guardar primero
+    const puesto=document.getElementById('ev-puesto').value.trim();
+    if(!puesto){toast('Completa al menos el nombre del puesto antes de continuar','error');return;}
+    saveEval();
+    setTimeout(()=>{
+      clearEval();
+      renderEvalHistory();
+      toast('✅ Guardado. Formulario listo para el siguiente colaborador.','success');
+    },300);
+  } else {
+    // Ya se guardo — solo limpiar, sin duplicar
     clearEval();
     renderEvalHistory();
-    toast('✅ Guardado. Formulario listo para el siguiente colaborador.','success');
-  },300);
+    toast('✅ Formulario listo para el siguiente colaborador.','success');
+  }
 }
 
 renderRecent();
