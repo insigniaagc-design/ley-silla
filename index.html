@@ -284,8 +284,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
     <div class="nav-item" onclick="showPanel('reporte',this)"><span class="ni">📄</span> Imprimir reporte</div>
   </nav>
   <div class="sidebar-footer">
-    <strong>Insignia AGC · Ley Silla v2.1</strong>
-    <a href="https://www.insigniaagc.com" target="_blank" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:10px">www.insigniaagc.com</a>
+    <a href="https://www.insigniaagc.com" target="_blank" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:11px">www.insigniaagc.com</a>
   </div>
 </aside>
 
@@ -432,7 +431,7 @@ body{font-family:var(--font-body);font-size:15px;color:var(--dark);background:va
             <input id="ev-jornada-otro" type="text" placeholder="Especifica la duración y tipo de tu jornada (ej. 10h diarias, 4 días a la semana)"
               style="display:none;margin-top:6px">
           </div>
-          <div class="field"><label>Tipo de bipedestación</label>
+          <div class="field form-full"><label>Tipo de bipedestación</label>
             <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:8px">
               <label class="bipe-card">
                 <input type="radio" name="bipe" value="Estática">
@@ -679,9 +678,9 @@ function showPanel(id,el){
   document.getElementById('page-subtitle').textContent=t[1];
   if(id==='base')renderDB();
   if(id==='reporte')populateSelect();
-  if(id==='pausas')renderPausas();
   if(id==='inicio')renderRecent();
-  if(id==='recorrido')renderRecorridos();
+  if(id==='evaluacion'){renderEvalHistory();showPatronBanners();}
+  if(id==='riesgo')showPatronBanners();
   closeSidebar();
 }
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('active')}
@@ -1340,8 +1339,12 @@ function saveAndNewEval(){
   }
 }
 
+// Initialize app
+buildChecklist();
+buildCondicionantes();
+setDate();
+showPanel('inicio', document.querySelector('.nav-item'));
 renderRecent();
-updateEvalHistory();
 </script>
 </body>
 </html>
