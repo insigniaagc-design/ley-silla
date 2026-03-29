@@ -801,12 +801,13 @@ function saveEval(){
     if(_saveBtn.disabled) return; // ya se está procesando
     _saveBtn.disabled = true;
     _saveBtn.style.opacity = '0.6';
+    const _btnOrigText = _saveBtn.textContent;
     _saveBtn.textContent = '⏳ Guardando...';
     setTimeout(function(){
       _saveBtn.disabled = false;
       _saveBtn.style.opacity = '';
-      if(!_editingEvalId) _saveBtn.textContent = '💾 Guardar evaluación completa';
-    }, 3000);
+      _saveBtn.textContent = _editingEvalId ? '💾 Actualizar evaluación' : '💾 Guardar evaluación completa';
+    }, 4000);
   }
   const puestoEl=document.getElementById('ev-puesto');
   if(!puestoEl){console.error('ev-puesto not found');return;}
@@ -858,16 +859,23 @@ function saveEval(){
       // Enviar condicionantes STPS actualizadas
       const _e = db.evaluaciones[idx];
       if(_e.riesgoTotal > 0){
+        const _empAct = db.empresas.length > 0 ? db.empresas[db.empresas.length-1] : null;
         const _rs = {
-          fecha: _e.fecha, empresa: _e.empresa,
-          trabajador: _e.trabajador||'', puesto: _e.puesto,
-          area: _e.area||'', puntaje_total: _e.riesgoTotal,
-          nivel: _e.riesgoNivel, observaciones: _e.riesgoObs||''
+          fecha: _e.fecha,
+          empresa: _e.empresa,
+          patron_razon: _empAct ? (_empAct.razon||'') : '',
+          patron_rfc: _empAct ? (_empAct.rfc||'') : '',
+          trabajador: _e.trabajador||'',
+          puesto: _e.puesto,
+          area: _e.area||'',
+          puntaje_total: _e.riesgoTotal,
+          nivel: _e.riesgoNivel,
+          observaciones: _e.riesgoObs||''
         };
-        _e.riesgoDetalle.forEach(function(d,i){
-          _rs['c'+(i+1)+'_label']=d.label;
-          _rs['c'+(i+1)+'_puntaje']=d.pts;
-          _rs['c'+(i+1)+'_descripcion']=d.txt;
+        (_e.riesgoDetalle||[]).forEach(function(det,i){
+          _rs['c'+(i+1)+'_label']=det.label||'';
+          _rs['c'+(i+1)+'_puntaje']=det.pts||0;
+          _rs['c'+(i+1)+'_descripcion']=det.txt||'';
         });
         sendToSheets('RIESGO_STPS',_rs);
       }
@@ -903,9 +911,13 @@ function saveEval(){
   sendToSheets('EVALUACION',r);
   // Enviar condicionantes STPS como registro separado estructurado
   if(r.riesgoTotal > 0){
+    // Obtener patron actual para enriquecer
+    const _empActual = db.empresas.length > 0 ? db.empresas[db.empresas.length-1] : null;
     const riesgoSheet = {
       fecha: r.fecha,
       empresa: r.empresa,
+      patron_razon: _empActual ? (_empActual.razon||'') : '',
+      patron_rfc: _empActual ? (_empActual.rfc||'') : '',
       trabajador: r.trabajador || '',
       puesto: r.puesto,
       area: r.area || '',
@@ -914,10 +926,10 @@ function saveEval(){
       observaciones: r.riesgoObs || ''
     };
     // Agregar cada condicionante como columna
-    r.riesgoDetalle.forEach(function(d, i){
-      riesgoSheet['c'+(i+1)+'_label'] = d.label;
-      riesgoSheet['c'+(i+1)+'_puntaje'] = d.pts;
-      riesgoSheet['c'+(i+1)+'_descripcion'] = d.txt;
+    (r.riesgoDetalle || []).forEach(function(det, i){
+      riesgoSheet['c'+(i+1)+'_label'] = det.label || '';
+      riesgoSheet['c'+(i+1)+'_puntaje'] = det.pts || 0;
+      riesgoSheet['c'+(i+1)+'_descripcion'] = det.txt || '';
     });
     sendToSheets('RIESGO_STPS', riesgoSheet);
   }
